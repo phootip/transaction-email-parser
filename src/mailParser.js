@@ -1,6 +1,24 @@
+import * as fs from 'fs';
 import { content_v2_1 } from 'googleapis';
 import { Base64 } from 'js-base64';
 import moment from 'moment';
+
+const mailRegex = {
+	'SCB Easy <scbeasynet@scb.co.th>': {
+		deposit: {
+			source: new RegExp('จาก: (.+) / (x+[0-9]{4})', 'i'),
+			destination: new RegExp('เข้าบัญชี: (x+[0-9]{4})', 'i'),
+			amount: new RegExp('จำนวน \\(บาท\\): ([0-9,.-]+)', 'i'),
+			date: new RegExp('วัน/เวลา: ([0-9]{2}\.+[0-9]{4}) - ([0-9]{2}:[0-9]{2})', 'i')
+		},
+		payment: {
+			source: new RegExp('<td>จาก ธนาคารไทยพาณิชย์ เบอร์บัญชี<\/td><td> (x+[0-9]{4})<\/td>', 'i'),
+			destination: new RegExp('<td>ไปยัง หมายเลขพร้อมเพย์ผู้รับเงิน<\/td><td> ([0-9]{10})<\/td>', 'i'),
+			amount: new RegExp('<td>จำนวนเงิน<\/td><td> ([0-9,.-]+) บาท<\/td>', 'i'),
+			date: new RegExp('<td>วันและเวลาการทำรายการ:<\/td><td>([0-9]{2}\.+[0-9]{4}) ณ ([0-9]{2}:[0-9]{2}:[0-9]{2})<\/td>', 'i')
+		},
+	}
+}
 
 export function mailToTransaction(mail) {
 	let mailObj = mailParser(mail)
@@ -34,22 +52,30 @@ function mailParser(mail) {
 
 function scbParser(mail) {
 	console.log('parsing scb easy...')
-	console.log(mail.Subject)
-	console.log(mail.body)
 	let result = {}
 	let body = mail.body.split('<BR><BR>')
+	fs.writeFileSync('./tmp/values.txt', mail.body)
+	let regexMapping
 	if (mail.Subject.includes('รับเงิน')) {
 		//  SCB Easy App:  คุณได้รับเงินผ่านรายการพร้อมเพย์
-		let detail = body[2].split('<BR>')
-		detail = detail.map(e => e.substring(e.indexOf(':') + 1).trim());
-		result.source = detail[0]
-		result.amount = parseFloat(detail[1].replace(',', ''))
-		result.destination = detail[2]
-		result.date = moment(thaiDateToISO(detail[3]))
-	} else if (mail.Subject.includes('ทำธุรกรรม')) {
+		regexMapping = mailRegex[mail.From]['deposit']
+	} else if (mail.Subject.includes('ทำธุรกรรม') && mail.body.includes('พร้อมเพย์')) {
 		//  แจ้งเตือนจากแอป SCB Easy: บริการอัตโนมัติแจ้งเตือนการทำธุรกรรม
-		
-
+		regexMapping = mailRegex[mail.From]['payment']
+	}
+	for (const [key, regex] of Object.entries(regexMapping)) {
+		const values = regex.exec(mail.body)
+		if (!values) continue
+		const valuesString = values.slice(1).join(' ')
+		if (key === 'amount') {
+			result[key] = parseFloat(valuesString.replace(',',''))
+		}
+		else if (key === 'date') {
+			result[key] = thaiDateToISO(valuesString)
+		}
+		else {
+			result[key] = valuesString
+		}
 	}
 
 	return result
@@ -63,6 +89,6 @@ function thaiDateToISO(thaiDate) {
 	let engDate = thaiDate
 	engDate[2] = parseInt(thaiDate[2]) - 543
 	engDate[1] = monthNamesEng[idx]
-	engDate.splice(3, 1)
-	return engDate.join(' ')
+	// engDate.splice(3, 1)
+	return moment(engDate.join(' '), 'DD MMM YYYY hh:mm:ss').toDate()
 }
