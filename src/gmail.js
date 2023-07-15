@@ -72,9 +72,9 @@ async function listLabels() {
 	await saveObject('labels', labels)
 }
 
-export async function listMailIds(labelIds) {
+export async function listMailIds(params) {
 	const gmail = await getGmail()
-	const res = await gmail.users.messages.list({ userId: 'me', labelIds })
+	const res = await gmail.users.messages.list({ userId: 'me', ...params })
 	return res.data.messages.map(x => x.id)
 }
 
