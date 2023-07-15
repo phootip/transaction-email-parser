@@ -4,6 +4,7 @@ import { Base64 } from 'js-base64';
 import moment from 'moment';
 import escapeStringRegexp from 'escape-string-regexp';
 import { exit } from 'process';
+import { threadId } from 'worker_threads';
 
 const compilePattern = (pattern) => {
 	return new RegExp(pattern.split(/\s+/).join('\\s*'))
@@ -40,7 +41,8 @@ export function mailToTransaction(mail) {
 
 function mailTokenizer(mail) {
 	let result = {
-		snippet: mail.data.snippet
+		snippet: mail.data.snippet,
+		threadId: mail.data.threadId
 	}
 	for (const header of mail.data.payload.headers) {
 		if (header.name === "From") {
@@ -73,6 +75,7 @@ function scbParser(mail) {
 		else if (key === 'date') result[key] = thaiDateToISO(valuesString)
 		else result[key] = valuesString
 	}
+	result.url = `https://mail.google.com/mail/#inbox/${mail.threadId}`
 
 	return result
 }

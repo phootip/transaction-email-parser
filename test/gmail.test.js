@@ -19,7 +19,7 @@ async function run() {
 			let rawdata = fs.readFileSync(`./tmp/testcase/mail${i}.json`);
 			let mail = JSON.parse(rawdata);
 			let a = mailParser.mailToTransaction(mail)
-			// console.log(a)
+			console.log(a)
 		} catch (e) {
 			console.log(e.message)
 			// console.log(e)
