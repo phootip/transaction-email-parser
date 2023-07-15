@@ -1,6 +1,7 @@
 import * as mailParser from "../src/mailParser.js"
 import * as gmail from "../src/gmail.js"
 import * as fs from 'fs'
+import _ from 'lodash'
 import moment from "moment"
 
 let labelIds = ['Label_4253791268172259692']
@@ -20,23 +21,21 @@ async function run() {
 	// 		console.log(e.message)
 	// 	}
 	// }
-	for (let i of Array(4).keys()) {
-		console.log(i)
+	for (let i of Array(2).keys()) {
+		console.log('testcase: ' + i)
 		try {
-			let rawdata = fs.readFileSync(`./test/testcase/mail${i}.json`);
+			let rawdata = fs.readFileSync(`./test/testcase_data/mail${i}.json`);
 			// let rawdata = fs.readFileSync(`./tmp/testcase/mail${i}.json`);
 			let mail = JSON.parse(rawdata);
-			console.log(mailParser.mailToTransaction(mail))
+			let result = mailParser.mailToTransaction(mail)
+			let expect = fs.readFileSync(`./test/testcase_expect/${i}.json`)
+			// fs.writeFileSync(`./test/testcase_expect/${i}.json`, JSON.stringify(result))
+			console.log(_.isEqual(JSON.parse(JSON.stringify(result)),JSON.parse(expect)))
+			// console.log(result)
 		} catch (e) {
 			console.log(e.message)
 		}
-		if (i === 1) break
 	}
-	// let mail = await gmail.readMail(mails[1])
-	// mail = await gmail.readMail(mails[6])
-	// let a = mailParser.mailToTransaction(mail)
-	// await console.log(a)
-	// expect(1).toBe(1)
 	// gmail.watcher()
 }
 // test('gmail', run)
