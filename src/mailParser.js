@@ -40,10 +40,8 @@ export function mailToTransaction(mail) {
 
 function mailTokenizer(mail) {
 	let result = {
-		body: mail.data.payload.parts[0].parts[0].body.data,
 		snippet: mail.data.snippet
 	}
-	result.body = Base64.decode(result.body).replace(/<td>|<\/td>|<tr>|<\/tr>|<BR>/g, ' ')
 	for (const header of mail.data.payload.headers) {
 		if (header.name === "From") {
 			result.From = header.value
@@ -52,6 +50,9 @@ function mailTokenizer(mail) {
 			result.Subject = header.value
 		}
 	}
+	if (!(result.From in mailRegex)) throw new Error(`Sender not supported - ${result.From}`)
+	result.body = mail.data.payload.parts[0].parts[0].body.data
+	result.body = Base64.decode(result.body).replace(/<td>|<\/td>|<tr>|<\/tr>|<BR>/g, ' ')
 	return result
 }
 
@@ -62,6 +63,7 @@ function scbParser(mail) {
 	// fs.writeFileSync('./tmp/payment.json',JSON.stringify(mail))
 	if (mail.Subject.includes('รับเงิน')) regexMapping = mailRegex[mail.From]['deposit']
 	else if (mail.Subject.includes('ทำธุรกรรม')) regexMapping = mailRegex[mail.From]['payment']
+	else throw new Error(`Subject not supported - sender: ${mail.From}, subject: ${mail.Subject}`)
 	for (const [key, regex] of Object.entries(regexMapping)) {
 		const values = regex.exec(mail.body)
 		// console.log(values)

@@ -12,12 +12,18 @@ async function run() {
 	// 	await fs.writeFileSync(`./tmp/testcase/mail${i}.json`, JSON.stringify(mail))
 	// }
 	for (let i of Array(100).keys()) {
-		// i = 1
-		let rawdata = fs.readFileSync(`./tmp/testcase/mail${i}.json`);
-		let mail = JSON.parse(rawdata);
-		let a = mailParser.mailToTransaction(mail)
+		// i = 28
 		console.log(i)
-		console.log(a)
+		try {
+
+			let rawdata = fs.readFileSync(`./tmp/testcase/mail${i}.json`);
+			let mail = JSON.parse(rawdata);
+			let a = mailParser.mailToTransaction(mail)
+			// console.log(a)
+		} catch (e) {
+			console.log(e.message)
+			// console.log(e)
+		}
 		// break
 	}
 	// let mail = await gmail.readMail(mails[1])
