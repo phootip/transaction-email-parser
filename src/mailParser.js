@@ -2,26 +2,31 @@ import * as fs from 'fs';
 import { content_v2_1 } from 'googleapis';
 import { Base64 } from 'js-base64';
 import moment from 'moment';
+import escapeStringRegexp from 'escape-string-regexp';
+import { exit } from 'process';
+
+const compilePattern = (pattern) => {
+	return new RegExp(pattern.split(/\s+/).join('\\s*'))
+}
 
 const mailRegex = {
 	'SCB Easy <scbeasynet@scb.co.th>': {
 		deposit: {
-			source: new RegExp('จาก: (.+) / (x+[0-9]{4})', 'i'),
-			destination: new RegExp('เข้าบัญชี: (x+[0-9]{4})', 'i'),
-			amount: new RegExp('จำนวน \\(บาท\\): ([0-9,.-]+)', 'i'),
-			date: new RegExp('วัน/เวลา: ([0-9]{2}\.+[0-9]{4}) - ([0-9]{2}:[0-9]{2})', 'i')
+			source: compilePattern('จาก: (.+) / (x+[0-9]{4})'),
+			destination: compilePattern('เข้าบัญชี: (x+[0-9]{4})'),
+			amount: compilePattern('จำนวน \\(บาท\\): ([0-9,.-]+)'),
+			date: compilePattern('วัน/เวลา: ([0-9]{2}.+[0-9]{4}) - ([0-9]{2}:[0-9]{2})')
 		},
 		payment: {
-			source: new RegExp('<td>จาก ธนาคารไทยพาณิชย์ เบอร์บัญชี<\/td><td> (x+[0-9]{4})<\/td>', 'i'),
-			destination: new RegExp('<td>ไปยัง หมายเลขพร้อมเพย์ผู้รับเงิน<\/td><td> ([0-9]{10})<\/td>', 'i'),
-			amount: new RegExp('<td>จำนวนเงิน<\/td><td> ([0-9,.-]+) บาท<\/td>', 'i'),
-			date: new RegExp('<td>วันและเวลาการทำรายการ:<\/td><td>([0-9]{2}\.+[0-9]{4}) ณ ([0-9]{2}:[0-9]{2}:[0-9]{2})<\/td>', 'i')
-		},
+			source: compilePattern('จาก ธนาคารไทยพาณิชย์ เบอร์บัญชี (x+[0-9]{4})'),
+			destination: compilePattern('ไปยัง [^\\s0-9]+ [^\\s0-9]* ([0-9]+)'),
+			amount: compilePattern('จำนวนเงิน ([0-9,.-]+) บาท'),
+			date: compilePattern('วันและเวลาการทำรายการ: ([0-9]{2}.+[0-9]{4}) ณ ([0-9]{2}:[0-9]{2}:[0-9]{2})')
+		}
 	}
 }
-
 export function mailToTransaction(mail) {
-	let mailObj = mailParser(mail)
+	let mailObj = mailTokenizer(mail)
 	switch (mailObj.From) {
 		case "SCB Easy <scbeasynet@scb.co.th>":
 			return scbParser(mailObj)
@@ -33,12 +38,12 @@ export function mailToTransaction(mail) {
 	throw new Error('sender not supported')
 }
 
-function mailParser(mail) {
+function mailTokenizer(mail) {
 	let result = {
 		body: mail.data.payload.parts[0].parts[0].body.data,
 		snippet: mail.data.snippet
 	}
-	result.body = Base64.decode(result.body)
+	result.body = Base64.decode(result.body).replace(/<td>|<\/td>|<tr>|<\/tr>|<BR>/g, ' ')
 	for (const header of mail.data.payload.headers) {
 		if (header.name === "From") {
 			result.From = header.value
@@ -53,29 +58,18 @@ function mailParser(mail) {
 function scbParser(mail) {
 	console.log('parsing scb easy...')
 	let result = {}
-	let body = mail.body.split('<BR><BR>')
-	fs.writeFileSync('./tmp/values.txt', mail.body)
 	let regexMapping
-	if (mail.Subject.includes('รับเงิน')) {
-		//  SCB Easy App:  คุณได้รับเงินผ่านรายการพร้อมเพย์
-		regexMapping = mailRegex[mail.From]['deposit']
-	} else if (mail.Subject.includes('ทำธุรกรรม') && mail.body.includes('พร้อมเพย์')) {
-		//  แจ้งเตือนจากแอป SCB Easy: บริการอัตโนมัติแจ้งเตือนการทำธุรกรรม
-		regexMapping = mailRegex[mail.From]['payment']
-	}
+	// fs.writeFileSync('./tmp/payment.json',JSON.stringify(mail))
+	if (mail.Subject.includes('รับเงิน')) regexMapping = mailRegex[mail.From]['deposit']
+	else if (mail.Subject.includes('ทำธุรกรรม')) regexMapping = mailRegex[mail.From]['payment']
 	for (const [key, regex] of Object.entries(regexMapping)) {
 		const values = regex.exec(mail.body)
+		// console.log(values)
 		if (!values) continue
 		const valuesString = values.slice(1).join(' ')
-		if (key === 'amount') {
-			result[key] = parseFloat(valuesString.replace(',',''))
-		}
-		else if (key === 'date') {
-			result[key] = thaiDateToISO(valuesString)
-		}
-		else {
-			result[key] = valuesString
-		}
+		if (key === 'amount') result[key] = parseFloat(valuesString.replace(',', ''))
+		else if (key === 'date') result[key] = thaiDateToISO(valuesString)
+		else result[key] = valuesString
 	}
 
 	return result
