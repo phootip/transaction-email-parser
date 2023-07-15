@@ -17,29 +17,29 @@ const parser = {
 }
 const patterns = {
 	'SCB Easy <scbeasynet@scb.co.th>': {
-		deposit: {
+		deposit_promptpay: {
 			source: { regex: compilePattern('จาก: ([^\\s]+) / (x+[0-9]{4})'), parse: parser.none },
 			destination: { regex: compilePattern('เข้าบัญชี: (x+[0-9]{4})'), parse: parser.addName('SCB') },
 			amount: { regex: compilePattern('จำนวน \\(บาท\\): ([0-9,.-]+)'), parse: parser.amount },
-			date: { regex: compilePattern('วัน/เวลา: ([0-9]{2}.+[0-9]{4}) - ([0-9]{2}:[0-9]{2})'), parse: parser.thaiDate }
+			date: { regex: compilePattern('วัน/เวลา: ([0-9]{1,2}.+[0-9]{4}) - ([0-9]{1,2}:[0-9]{2})'), parse: parser.thaiDate }
 		},
 		payment: {
 			source: { regex: compilePattern('จาก ธนาคารไทยพาณิชย์ เบอร์บัญชี (x+[0-9]{4})'), parse: parser.addName('SCB') },
 			destination: { regex: compilePattern('ไปยัง [^\\s0-9]+ [^\\s0-9]* ([0-9]+)'), parse: parser.none },
 			amount: { regex: compilePattern('จำนวนเงิน ([0-9,.-]+) บาท'), parse: parser.amount },
-			date: { regex: compilePattern('วันและเวลาการทำรายการ: ([0-9]{2}.+[0-9]{4}) ณ ([0-9]{2}:[0-9]{2}:[0-9]{2})'), parse: parser.thaiDate }
+			date: { regex: compilePattern('วันและเวลาการทำรายการ: ([0-9]{1,2}.+[0-9]{4}) ณ ([0-9]{1,2}:[0-9]{2}:[0-9]{2})'), parse: parser.thaiDate }
 		},
 		payment_promptpay: {
 			source: { regex: compilePattern('จาก ธนาคารไทยพาณิชย์ เบอร์บัญชี (x+[0-9]{4})'), parse: parser.addName('SCB') },
 			destination: { regex: compilePattern('ไปยัง [^\\s0-9]+ ([0-9]+)'), parse: parser.addName('PromptPay') },
 			amount: { regex: compilePattern('จำนวนเงิน ([0-9,.-]+) บาท'), parse: parser.amount },
-			date: { regex: compilePattern('วันและเวลาการทำรายการ: ([0-9]{2}.+[0-9]{4}) ณ ([0-9]{2}:[0-9]{2}:[0-9]{2})'), parse: parser.thaiDate }
+			date: { regex: compilePattern('วันและเวลาการทำรายการ: ([0-9]{1,2}.+[0-9]{4}) ณ ([0-9]{1,2}:[0-9]{2}:[0-9]{2})'), parse: parser.thaiDate }
 		},
 		payment_ewallet: {
 			source: { regex: compilePattern('จาก ธนาคารไทยพาณิชย์ เบอร์บัญชี (x+[0-9]{4})'), parse: parser.addName('SCB') },
 			destination: { regex: compilePattern('e-Wallet ID ([0-9]+)'), parse: parser.addName('e-Wallet') },
 			amount: { regex: compilePattern('จำนวนเงิน ([0-9,.-]+) บาท'), parse: parser.amount },
-			date: { regex: compilePattern('วันและเวลาการทำรายการ: ([0-9]{2}.+[0-9]{4}) ณ ([0-9]{2}:[0-9]{2}:[0-9]{2})'), parse: parser.thaiDate }
+			date: { regex: compilePattern('วันและเวลาการทำรายการ: ([0-9]{1,2}.+[0-9]{4}) ณ ([0-9]{1,2}:[0-9]{2}:[0-9]{2})'), parse: parser.thaiDate }
 		}
 	}
 }
@@ -51,8 +51,6 @@ export function mailToTransaction(mail) {
 		case "SCB Easy <scbeasynet@scb.co.th>":
 			patternMapping = scbPatternPicker(mailObj)
 			break;
-		default:
-			throw new Error('sender not supported')
 	}
 	const result = {}
 	for (const [key, pattern] of Object.entries(patternMapping)) {
@@ -77,11 +75,13 @@ function mailTokenizer(mail) {
 	if (!(result.From in patterns)) throw new Error(`Sender not supported - ${result.From}`)
 	result.body = mail.data.payload.parts[0].parts[0].body.data
 	result.body = Base64.decode(result.body).replace(/<td>|<\/td>|<tr>|<\/tr>|<BR>/g, ' ')
+	fs.writeFileSync('./tmp/mail0_body.json',JSON.stringify(result.body))
+	// exit()
 	return result
 }
 
 function scbPatternPicker(mail) {
-	if (mail.Subject.includes('รับเงิน')) return patterns[mail.From]['deposit']
+	if (mail.body.includes('รับเงินผ่านรายการพร้อมเพย์')) return patterns[mail.From]['deposit_promptpay']
 	if (mail.body.includes('ชำระค่าสินค้าและบริการ')) return patterns[mail.From]['payment']
 	if (mail.body.includes('โอนเงินพร้อมเพย์')) return patterns[mail.From]['payment_promptpay']
 	if (mail.body.includes('เติมเงินพร้อมเพย์')) return patterns[mail.From]['payment_ewallet']

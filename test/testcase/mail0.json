@@ -1,0 +1,69 @@
+{
+	"config": {},
+	"data": {
+		"id": "xxxxxxxxxxxxxxxx",
+		"threadId": "xxxxxxxxxxxxxxxx",
+		"labelIds": [
+			"INBOX"
+		],
+		"snippet": "เรียน xxx xxxxx ธนาคารขอแจ้งว่า คุณได้เข้าสู่ระบบ แอพ SCB Easy ครั้งล่าสุด เมื่อวันที่ 1 ก.ค. 2555 เวลา 11:22:33 น. โดยทำธุรกรรมดังนี้ ประเภทของรายการ: โอนเงินพร้อมเพย์ รายละเอียด: จาก ธนาคาร",
+		"payload": {
+			"partId": "",
+			"mimeType": "multipart/mixed",
+			"filename": "",
+			"headers": [
+				{
+					"name": "From",
+					"value": "SCB Easy <scbeasynet@scb.co.th>"
+				},
+				{
+					"name": "Subject",
+					"value": "แจ้งเตือนจากแอป SCB Easy: บริการอัตโนมัติแจ้งเตือนการทำธุรกรรม"
+				}
+			],
+			"body": {
+				"size": 0
+			},
+			"parts": [
+				{
+					"partId": "0",
+					"mimeType": "multipart/related",
+					"filename": "",
+					"headers": [
+					],
+					"body": {
+						"size": 0
+					},
+					"parts": [
+						{
+							"partId": "0.0",
+							"mimeType": "text/html",
+							"filename": "",
+							"headers": [
+								{
+									"name": "Content-Type",
+									"value": "text/html;charset=UTF-8"
+								},
+								{
+									"name": "Content-Transfer-Encoding",
+									"value": "base64"
+								}
+							],
+							"body": {
+								"size": 3467,
+								"data": "4LmA4Lij4Li14Lii4LiZIHh4eCB4eHh4eCDguJjguJnguLLguITguLLguKPguILguK3guYHguIjguYnguIfguKfguYjguLIg4LiE4Li44LiT4LmE4LiU4LmJ4LmA4LiC4LmJ4Liy4Liq4Li54LmI4Lij4Liw4Lia4LiaIOC5geC4reC4niBTQ0IgRWFzeSDguITguKPguLHguYnguIfguKXguYjguLLguKrguLjguJQg4LmA4Lih4Li34LmI4Lit4Lin4Lix4LiZ4LiX4Li14LmIIDEg4LiBLuC4hC4gMjU1NSDguYDguKfguKXguLIgMTE6MjI6MzMg4LiZLiDguYLguJTguKLguJfguLPguJjguLjguKPguIHguKPguKPguKHguJTguLHguIfguJnguLXguYkgIDx0YWJsZSBib3JkZXI9IjAiPiAg4Lib4Lij4Liw4LmA4Lig4LiX4LiC4Lit4LiH4Lij4Liy4Lii4LiB4Liy4LijOiAg4LmC4Lit4LiZ4LmA4LiH4Li04LiZ4Lie4Lij4LmJ4Lit4Lih4LmA4Lie4Lii4LmMICAgICAg4Lij4Liy4Lii4Lil4Liw4LmA4Lit4Li14Lii4LiUOiAg4LiI4Liy4LiBIOC4mOC4meC4suC4hOC4suC4o+C5hOC4l+C4ouC4nuC4suC4k+C4tOC4iuC4ouC5jCDguYDguJrguK3guKPguYzguJrguLHguI3guIrguLUgICB4eHh4eHgxMjM0ICAgICAg4LmE4Lib4Lii4Lix4LiHIOC4q+C4oeC4suC4ouC5gOC4peC4guC4nuC4o+C5ieC4reC4oeC5gOC4nuC4ouC5jOC4nOC4ueC5ieC4o+C4seC4muC5gOC4h+C4tOC4mSAgIDA4MTIzNDU2NzggICAgICDguIjguLPguJnguKfguJnguYDguIfguLTguJkgICAxMi4yNSDguJrguLLguJcgICAg4Lin4Lix4LiZ4LmB4Lil4Liw4LmA4Lin4Lil4Liy4LiB4Liy4Lij4LiX4Liz4Lij4Liy4Lii4LiB4Liy4LijOiAgMSDguIEu4LiELiAyNTU1IOC4kyAxMToyMjozMyAgICA8L3RhYmxlPiAg4Lia4Lij4Li04LiB4Liy4Lij4Lit4Lix4LiV4LmC4LiZ4Lih4Lix4LiV4Li04LiZ4Li14LmJIOC5gOC4m+C5h+C4meC4geC4suC4o+C5gOC4nuC4tOC5iOC4oeC4geC4suC4o+C4m+C5ieC4reC4h+C4geC4seC4meC5geC4peC4sOC5geC4iOC5ieC4h+C5gOC4leC4t+C4reC4meC4geC4suC4o+C4l+C4s+C4mOC4uOC4o+C4geC4o+C4o+C4oeC4iOC4suC4geC4muC4seC4jeC4iuC4teC4guC4reC4h+C4hOC4uOC4kyDguKvguLLguIHguITguLjguJPguYTguKHguYjguYTguJTguYnguYDguILguYnguLLguKrguLnguYjguKPguLDguJrguJrguKvguKPguLfguK3guJfguLPguKPguLLguKLguIHguLLguKPguYPguJnguIrguYjguKfguIfguYDguKfguKXguLLguJTguLHguIfguIHguKXguYjguLLguKcg4LiB4Lij4Li44LiT4Liy4LiV4Li04LiU4LiV4LmI4Lit4LiY4LiZ4Liy4LiE4Liy4Lij4LiX4Lix4LiZ4LiX4Li14LiX4Li14LmIIDAyLTc3Ny03Nzc3ICDguILguK3guYHguKrguJTguIfguITguKfguLLguKHguJnguLHguJrguJbguLfguK0g4LiY4LiZ4Liy4LiE4Liy4Lij4LmE4LiX4Lii4Lie4Liy4LiT4Li04LiK4Lii4LmMIOC4iOC4s+C4geC4seC4lCAo4Lih4Lir4Liy4LiK4LiZKSAg4LiY4LiZ4Liy4LiE4Liy4Lij4LiC4Lit4LmA4Lij4Li14Lii4LiZ4LmD4Lir4LmJ4LiX4Lij4Liy4Lia4Lin4LmI4LiyIOC4mOC4meC4suC4hOC4suC4o+C5hOC4oeC5iOC4oeC4teC4meC5guC4ouC4muC4suC4ouC5g+C4meC4geC4suC4o+C4leC4tOC4lOC4leC5iOC4reC4peC4ueC4geC4hOC5ieC4suC5hOC4oeC5iOC4p+C5iOC4suC4nOC5iOC4suC4meC4iuC5iOC4reC4h+C4l+C4suC4h+C5g+C4lOC5hiDguYDguJ7guLfguYjguK3guKrguK3guJrguJbguLLguKHguKvguKPguLfguK3guILguK3guILguYnguK3guKHguLnguKXguYDguInguJ7guLLguLAg4LmA4LiK4LmI4LiZIHVzZXJuYW1lLCBwYXNzd29yZCwg4Lir4Lih4Liy4Lii4LmA4Lil4LiC4Lia4Lix4LiN4LiK4Li1IOC4q+C4o+C4t+C4rSDguKvguKHguLLguKLguYDguKXguILguJrguLHguJXguKPguYDguITguKPguJTguLTguJUg4Liv4Lil4LivIOC4l+C4seC5ieC4h+C4meC4teC5iSDguKvguLLguIHguJ7guJrguYDguKvguYfguJnguIHguLLguKPguJfguLPguJjguLjguKPguIHguKPguKPguKEg4Lir4Lij4Li34Lit4LmE4LiU4LmJ4Lij4Lix4Lia4LiB4Liy4Lij4LiV4Li04LiU4LiV4LmI4Lit4LiX4Li14LmI4Lic4Li04LiU4Lib4LiB4LiV4Li0IOC5guC4m+C4o+C4lOC4leC4tOC4lOC4leC5iOC4reC4mOC4meC4suC4hOC4suC4o+C5geC4peC4sOC5g+C4q+C5ieC4guC5ieC4reC4oeC4ueC4pSDguYDguJ7guLfguYjguK3guYPguKvguYnguJfguLXguKHguIfguLLguJnguILguK3guIfguJjguJnguLLguITguLLguKPguJfguLPguIHguLLguKPguKrguLfguJrguKrguKfguJkg4LmA4Lie4Li34LmI4Lit4LiE4Lin4Liy4Lih4Lib4Lil4Lit4LiU4Lig4Lix4Lii4LiC4Lit4LiH4Lil4Li54LiB4LiE4LmJ4Liy4LmB4Lil4Liw4LmA4Lie4Li34LmI4Lit4LiK4LmI4Lin4Lii4LmA4Lir4Lil4Li34Lit4Lic4Li54LmJ4LiX4Li14LmI4Lit4Liy4LiI4LmA4Lib4LmH4LiZ4LmA4Lir4Lii4Li34LmI4Lit4LmC4LiU4Lii4LmE4Lih4LmI4Lij4Li54LmJ4LiV4Lix4LinICDguK3guLXguYDguKHguKXguInguJrguLHguJrguJnguLXguYnguYDguJvguYfguJnguIHguLLguKPguYHguIjguYnguIfguILguYnguK3guKHguLnguKXguIjguLLguIHguKPguLDguJrguJrguK3guLHguJXguYLguJnguKHguLHguJXguLQg4LiB4Lij4Li44LiT4Liy4Lit4Lii4LmI4Liy4LiV4Lit4Lia4LiB4Lil4Lix4LiaIOC4q+C4suC4geC4oeC4teC4guC5ieC4reC4quC4h+C4quC4seC4ouC4q+C4o+C4t+C4reC4leC5ieC4reC4h+C4geC4suC4o+C4quC4reC4muC4luC4suC4oeC4o+C4suC4ouC4peC4sOC5gOC4reC4teC4ouC4lOC5gOC4nuC4tOC5iOC4oeC5gOC4leC4tOC4oSDguIHguKPguLjguJPguLLguJXguLTguJTguJXguYjguK3guJXguLLguKHguYDguJrguK3guKPguYzguYLguJfguKPguKjguLHguJ7guJfguYzguJfguLXguYjguYPguKvguYnguYTguKfguYnguJTguYnguLLguJnguJrguJkgIOC4hOC4uOC4k+C4quC4suC4oeC4suC4o+C4luC5gOC4m+C4tOC4lC/guJvguLTguJQg4LiB4Liy4Lij4LmB4LiI4LmJ4LiH4LmA4LiV4Li34Lit4LiZ4LiX4Liy4LiH4Lit4Li14LmA4Lih4Lil4LmE4LiU4LmJIOC4iOC4suC4geC4q+C4meC5ieC4siDguYDguKHguJnguLnguK3guLfguYjguJnguYYgPiDguIHguLLguKPguJXguLHguYnguIfguITguYjguLIgPiDguIHguLLguKPguIjguLHguJTguIHguLLguKPguIHguLLguKPguYHguIjguYnguIfguYDguJXguLfguK3guJk="
+							}
+						}
+					]
+				}
+			]
+		},
+		"sizeEstimate": 9353,
+		"historyId": "1111111",
+		"internalDate": "1689000000000"
+	},
+	"headers": {},
+	"status": 200,
+	"statusText": "OK",
+	"request": {}
+}

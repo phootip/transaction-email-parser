@@ -1,0 +1,68 @@
+{
+	"config": {},
+	"data": {
+		"id": "xxxxxxxxxxxxxxxx",
+		"threadId": "xxxxxxxxxxxxxxxx",
+		"labelIds": [
+			"INBOX"
+		],
+		"snippet": "เรียน xxx xxxxx คุณได้รับเงินผ่านรายการพร้อมเพย์ โดยมีรายละเอียด ดังนี้ จาก: KBANK / xxxxxx4321 จำนวน (บาท): 79.00 เข้าบัญชี: xxxxxx1234 วัน/เวลา: 12 ก.ค. 2555 - 18:14 ขอแสดงความนับถือ",
+		"payload": {
+			"partId": "",
+			"mimeType": "multipart/mixed",
+			"filename": "",
+			"headers": [
+				{
+					"name": "From",
+					"value": "SCB Easy <scbeasynet@scb.co.th>"
+				},
+				{
+					"name": "Subject",
+					"value": " SCB Easy App:  คุณได้รับเงินผ่านรายการพร้อมเพย์"
+				}
+			],
+			"body": {
+				"size": 0
+			},
+			"parts": [
+				{
+					"partId": "0",
+					"mimeType": "multipart/related",
+					"filename": "",
+					"headers": [],
+					"body": {
+						"size": 0
+					},
+					"parts": [
+						{
+							"partId": "0.0",
+							"mimeType": "text/html",
+							"filename": "",
+							"headers": [
+								{
+									"name": "Content-Type",
+									"value": "text/html;charset=UTF-8"
+								},
+								{
+									"name": "Content-Transfer-Encoding",
+									"value": "base64"
+								}
+							],
+							"body": {
+								"size": 999,
+								"data": "4LmA4Lij4Li14Lii4LiZIHh4eCB4eHh4eCAg4LiE4Li44LiT4LmE4LiU4LmJ4Lij4Lix4Lia4LmA4LiH4Li04LiZ4Lic4LmI4Liy4LiZ4Lij4Liy4Lii4LiB4Liy4Lij4Lie4Lij4LmJ4Lit4Lih4LmA4Lie4Lii4LmMIOC5guC4lOC4ouC4oeC4teC4o+C4suC4ouC4peC4sOC5gOC4reC4teC4ouC4lCDguJTguLHguIfguJnguLXguYkgIOC4iOC4suC4gTogS0JBTksgLyB4eHh4eHg0MzIxIOC4iOC4s+C4meC4p+C4mSAo4Lia4Liy4LiXKTogNzkuMDAg4LmA4LiC4LmJ4Liy4Lia4Lix4LiN4LiK4Li1OiB4eHh4eHgxMjM0IOC4p+C4seC4mS/guYDguKfguKXguLI6IDEyIOC4gS7guIQuIDI1NTUgLSAxODoxNCAg4LiC4Lit4LmB4Liq4LiU4LiH4LiE4Lin4Liy4Lih4LiZ4Lix4Lia4LiW4Li34LitIOC4mOC4meC4suC4hOC4suC4o+C5hOC4l+C4ouC4nuC4suC4k+C4tOC4iuC4ouC5jCDguIjguLPguIHguLHguJQgKOC4oeC4q+C4suC4iuC4mSkgIOC4reC4teC5gOC4oeC4peC4ieC4muC4seC4muC4meC4teC5ieC5gOC4m+C5h+C4meC4geC4suC4o+C5geC4iOC5ieC4h+C4guC5ieC4reC4oeC4ueC4peC4iOC4suC4geC4o+C4sOC4muC4muC5guC4lOC4ouC4reC4seC4leC5guC4meC4oeC4seC4leC4tCDguIHguKPguLjguJPguLLguK3guKLguYjguLLguJXguK3guJrguIHguKXguLHguJog4Lir4Liy4LiB4LiX4LmI4Liy4LiZ4Lih4Li14LiC4LmJ4Lit4Liq4LiH4Liq4Lix4Lii4Lir4Lij4Li34Lit4Lib4Lij4Liw4Liq4LiH4LiE4LmM4LiI4Liw4Liq4Lit4Lia4LiW4Liy4Lih4Lij4Liy4Lii4Lil4Liw4LmA4Lit4Li14Lii4LiU4LmA4Lie4Li04LmI4Lih4LmA4LiV4Li04LihIOC4geC4o+C4uOC4k+C4suC4leC4tOC4lOC4leC5iOC4reC4mOC4meC4suC4hOC4suC4o+C4l+C4teC5iCAwMi03NzctNzc3Nw=="
+							}
+						}
+					]
+				}
+			]
+		},
+		"sizeEstimate": 5877,
+		"historyId": "1111111",
+		"internalDate": "1689000000000"
+	},
+	"headers": {},
+	"status": 200,
+	"statusText": "OK",
+	"request": {}
+}

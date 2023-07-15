@@ -30,6 +30,7 @@ async function run() {
 		} catch (e) {
 			console.log(e.message)
 		}
+		if (i === 1) break
 	}
 	// let mail = await gmail.readMail(mails[1])
 	// mail = await gmail.readMail(mails[6])
