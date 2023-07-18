@@ -35,8 +35,8 @@ export default {
 			transfer_promptpay: {
 				regexs: {
 					source: { regex: compilePattern('From Account: ([x\\-0-9]+)'), parse: parser.none },
-					destination: { regex: compilePattern('To PromptPay|Wallet ID: ([x\\-0-9]+)'), parse: parser.none },
-					destination_name: { regex: compilePattern('Received|Wallet Name: (.+)'), parse: parser.none },
+					destination: { regex: compilePattern('To (?:PromptPay|Wallet) ID: ([x\\-0-9]+)'), parse: parser.none },
+					destination_name: { regex: compilePattern('(?:Received|Wallet) Name: (.+)'), parse: parser.none },
 					amount: { regex: compilePattern('Amount \\(THB\\): ([0-9,.-]+)'), parse: parser.amount },
 					fee: { regex: compilePattern('Fee \\(THB\\): ([0-9,.-]+)'), parse: parser.amount },
 					available_balance: { regex: compilePattern('Available Balance \\(THB\\): ([0-9,.-]+)'), parse: parser.amount },
