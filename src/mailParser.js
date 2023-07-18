@@ -11,6 +11,7 @@ export function mailToTransaction(mail) {
 	let mailObj = headerTokenizer(mail)
 	let provider = providers[mailObj.From]
 	mailObj.body = provider.bodyExtractor(mail, mailObj)
+	// fs.writeFileSync(`./tmp/testcase/kkp/body.json`, mailObj.body)
 	let patternMapping = provider.patternPicker(mailObj)
 
 	const output = { ...patternMapping.extras }
