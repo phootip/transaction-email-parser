@@ -17,5 +17,17 @@
     "jest": "^29.6.1",
     "lodash": "^4.17.21"
   },
-  "type": "module"
+  "type": "module",
+  "main": "./src/index.js",
+  "name": "transaction-email-parser",
+  "description": "A JS library that can be used to parse transaction information from EMail messages.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/phootip/transaction-email-parser"
+  },
+  "author": "Phootip Tulayavorases <phootip.t@gmail.com>",
+  "bugs": {
+    "url": "https://github.com/phootip/transaction-email-parser/issues"
+  },
+  "homepage": "https://github.com/phootip/transaction-email-parser#readme"
 }
