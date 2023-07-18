@@ -9,7 +9,8 @@ let labelIds = ['Label_1393988687206709640']
 
 async function gmailTest() {
 	let before = moment().format('YYYY/MM/DD')
-	let after = moment().add({ days: -1 }).format('YYYY/MM/DD')
+	// let after = moment().add({ days: -1 }).format('YYYY/MM/DD')
+	let after = moment().add({ days: -30 }).format('YYYY/MM/DD')
 	// let mails = await gmail.listMailIds({ labelIds, q: `before:${before} after:${after}` })
 	let mails = await gmail.listMailIds({ labelIds, q: `before:${before} after:${after} aisebill` })
 	console.log(mails, mails.length)

@@ -16,8 +16,8 @@ function dmyDateToISO(d) {
 }
 
 function thaiDateToISO(thaiDate) {
-	var monthNamesThai = ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."];
-	var monthNamesEng = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"];
+	var monthNamesThai = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
+	var monthNamesEng = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
 	thaiDate = thaiDate.split(' ')
 	let idx = monthNamesThai.indexOf(thaiDate[1])
 	let engDate = thaiDate
@@ -62,7 +62,7 @@ export default {
 				date: { regex: compilePattern('วันและเวลาการทำรายการ: ([0-9]{1,2}.+[0-9]{4}) ณ ([0-9]{1,2}:[0-9]{2}:[0-9]{2})'), parse: thaiDateToISO }
 			},
 			extras: {
-				type: "payment",
+				type: 'payment',
 				source_provider: 'SCB',
 				destination_provider: 'PromptPay'
 			}
@@ -75,7 +75,7 @@ export default {
 				date: { regex: compilePattern('วันและเวลาการทำรายการ: ([0-9]{1,2}.+[0-9]{4}) ณ ([0-9]{1,2}:[0-9]{2}:[0-9]{2})'), parse: thaiDateToISO }
 			},
 			extras: {
-				type: "payment",
+				type: 'payment',
 				source_provider: 'SCB',
 				destination_provider: 'e-Wallet'
 			}
@@ -89,7 +89,7 @@ export default {
 				date: { regex: compilePattern('วันและเวลาการทำรายการ: ([0-9]{1,2}.+[0-9]{4}) ณ ([0-9]{1,2}:[0-9]{2}:[0-9]{2})'), parse: thaiDateToISO }
 			},
 			extras: {
-				type: "transfer",
+				type: 'transfer',
 				source_provider: 'SCB'
 			}
 		}
@@ -108,9 +108,22 @@ export default {
 				date: { regex: compilePattern('Transaction Date: ([0-9]{1,2}/[0-9]{2}/[0-9]{4}) ([0-9]{1,2}:[0-9]{2}:[0-9]{2})'), parse: dmyDateToISO }
 			},
 			extras: {
-				type: "transfer",
+				type: 'transfer',
 				source_provider: 'Kasikorn'
 			}
 		}
+	},
+	'<AISeBill@billing.ais.co.th>': {
+		bill: {
+			regexs: {
+				amount: { regex: compilePattern('Total Current Charge ([1-9,.-]+) Baht'), parse: parser.amount },
+			},
+			extras: {
+				type: 'bill',
+				provider: 'AIS'
+			}
+		},
+
+
 	}
 }

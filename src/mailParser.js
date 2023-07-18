@@ -19,6 +19,10 @@ export function mailToTransaction(mail) {
 			mailObj.body = defaultBodyExtractor(mail)
 			patternMapping = kbankPatternPicker(mailObj)
 			break;
+		case '<AISeBill@billing.ais.co.th>':
+			mailObj.body = aisBodyExtractor(mail)
+			patternMapping = patterns[mailObj.From]['bill']
+			// fs.writeFileSync(`./tmp/testcase/kbank/body1.json`, JSON.stringify(mailObj))
 	}
 	const output = { ...patternMapping.extras }
 	for (const [key, pattern] of Object.entries(patternMapping.regexs)) {
@@ -54,6 +58,12 @@ function defaultBodyExtractor(mail) {
 function scbBodyExtractor(mail) {
 	let body = mail.data.payload.parts[0].parts[0].body.data
 	body = Base64.decode(body).replace(/<td>|<\/td>|<tr>|<\/tr>|<BR>/g, ' ')
+	return body
+}
+
+function aisBodyExtractor(mail) {
+	let body = mail.data.payload.parts[0].body.data
+	body = Base64.decode(body).replace(/<[^>]*>|&nbsp;/g, ' ')
 	return body
 }
 
