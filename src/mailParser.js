@@ -9,28 +9,14 @@ import providers from './providers/index.js'
 
 export function mailToTransaction(mail) {
 	let mailObj = headerTokenizer(mail)
-	let patternMapping
 	let provider = providers[mailObj.From]
 	mailObj.body = provider.bodyExtractor(mail)
-	patternMapping = provider.patternPicker(mailObj)
-	// switch (mailObj.From) {
-	// 	case 'SCB Easy <scbeasynet@scb.co.th>':
-	// 		mailObj.body = scbBodyExtractor(mail)
-	// 		patternMapping = scbPatternPicker(mailObj)
-	// 		break;
-	// 	case 'K PLUS <KPLUS@kasikornbank.com>':
-	// 		mailObj.body = defaultBodyExtractor(mail)
-	// 		patternMapping = kbankPatternPicker(mailObj)
-	// 		break;
-	// 	case '<AISeBill@billing.ais.co.th>':
-	// 		mailObj.body = aisBodyExtractor(mail)
-	// 		patternMapping = providers[mailObj.From]['bill']
-	// 		// fs.writeFileSync(`./tmp/testcase/kbank/body1.json`, JSON.stringify(mailObj))
-	// }
+	let patternMapping = provider.patternPicker(mailObj)
+
 	const output = { ...patternMapping.extras }
 	for (const [key, pattern] of Object.entries(patternMapping.regexs)) {
 		const values = pattern.regex.exec(mailObj.body)
-		if (!values) continue
+		if (!values) throw new Error(`regex exec return nothing, key:${key} - sender: ${mailObj.From}, subject: ${mailObj.Subject}, link:${mailObj.url}`)
 		const valuesString = values.slice(1).join(' ')
 		output[key] = pattern.parse(valuesString)
 	}
