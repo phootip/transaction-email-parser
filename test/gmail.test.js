@@ -10,9 +10,10 @@ let labelIds = ['Label_1393988687206709640']
 async function gmailTest() {
 	let before = moment().format('YYYY/MM/DD')
 	// let after = moment().add({ days: -1 }).format('YYYY/MM/DD')
-	let after = moment().add({ days: -30 }).format('YYYY/MM/DD')
-	// let mails = await gmail.listMailIds({ labelIds, q: `before:${before} after:${after}` })
-	let mails = await gmail.listMailIds({ labelIds, q: `before:${before} after:${after} aisebill` })
+	let after = moment().add({ days: -90}).format('YYYY/MM/DD')
+	let mails = await gmail.listMailIds({ labelIds, q: `before:${before} after:${after} k plus` })
+	// let mails = await gmail.listMailIds({ labelIds, q: `label:money-transaction k plus` })
+	// let mails = await gmail.listMailIds({ labelIds, q: `before:${before} after:${after} aisebill` })
 	console.log(mails, mails.length)
 	for (const [i, id] of mails.entries()) {
 		console.log(i, id)
@@ -22,6 +23,7 @@ async function gmailTest() {
 			console.log(mailParser.mailToTransaction(mail))
 		} catch (e) {
 			console.log(e)
+			exit()
 		}
 	}
 }

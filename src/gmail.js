@@ -76,6 +76,7 @@ export async function listLabels() {
 export async function listMailIds(params) {
 	const gmail = await getGmail()
 	const res = await gmail.users.messages.list({ userId: 'me', ...params })
+	if (!(res.data.messages)) throw new Error(`no mail found with params: ${params}`)
 	return res.data.messages.map(x => x.id)
 }
 
