@@ -16,6 +16,9 @@ export function mailToTransaction(mail) {
 	const output = { ...patternMapping.extras }
 	for (const [key, pattern] of Object.entries(patternMapping.regexs)) {
 		const values = pattern.regex.exec(mailObj.body)
+		// console.log(pattern.regex)
+		// console.log(values)
+		if (!values && pattern.optional === true) continue
 		if (!values) throw new Error(`regex exec return nothing, key:${key} - sender: ${mailObj.From}, subject: ${mailObj.Subject}, link:${mailObj.url}`)
 		const valuesString = values.slice(1).join(' ')
 		output[key] = pattern.parse(valuesString)

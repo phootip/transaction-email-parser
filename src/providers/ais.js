@@ -12,7 +12,7 @@ export default {
 		patterns: {
 			bill: {
 				regexs: {
-					amount: { regex: compilePattern('Total Current Charge ([1-9,.-]+) Baht'), parse: parser.amount },
+					amount: { regex: compilePattern('(?:Total Current Charge|รวมค่าใช้บริการรอบปัจจุบัน) ([0-9,.-]+) (?:Baht|บาท)'), parse: parser.amount },
 				},
 				extras: {
 					type: 'bill',
