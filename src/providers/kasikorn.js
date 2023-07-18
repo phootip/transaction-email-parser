@@ -3,8 +3,9 @@ import { Base64 } from 'js-base64';
 
 export default {
 	'K PLUS <KPLUS@kasikornbank.com>': {
-		bodyExtractor: (mail) => {
+		bodyExtractor: (mail, mailObj) => {
 			const body = mail.data.payload.body.data
+			if (!body) throw new Error(`bodyExtractor Failed - sender: ${mailObj.From}, subject: ${mailObj.Subject}, link:${mailObj.url}`)
 			return Base64.decode(body)
 		},
 		patternPicker: function (mailObj) {

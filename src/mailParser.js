@@ -10,7 +10,7 @@ import providers from './providers/index.js'
 export function mailToTransaction(mail) {
 	let mailObj = headerTokenizer(mail)
 	let provider = providers[mailObj.From]
-	mailObj.body = provider.bodyExtractor(mail)
+	mailObj.body = provider.bodyExtractor(mail, mailObj)
 	let patternMapping = provider.patternPicker(mailObj)
 
 	const output = { ...patternMapping.extras }
