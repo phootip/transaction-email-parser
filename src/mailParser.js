@@ -23,7 +23,7 @@ const patterns = {
 				source: { regex: compilePattern('จาก: [^\\s]+ / (x+[0-9]{4})'), parse: parser.none },
 				destination: { regex: compilePattern('เข้าบัญชี: (x+[0-9]{4})'), parse: parser.none },
 				amount: { regex: compilePattern('จำนวน \\(บาท\\): ([0-9,.-]+)'), parse: parser.amount },
-				date: { regex: compilePattern('วัน/เวลา: ([0-9]{1,2}.+[0-9]{4}) - ([0-9]{1,2}:[0-9]{2})'), parse: parser.thaiDate }
+				date: { regex: compilePattern('วัน/เวลา: ([0-9]{1,2}.+[0-9]{4}) - ([0-9]{1,2}:[0-9]{2})'), parse: thaiDateToISO }
 			},
 			extras: {
 				type: 'deposit',
@@ -35,7 +35,7 @@ const patterns = {
 				source: { regex: compilePattern('จาก ธนาคารไทยพาณิชย์ เบอร์บัญชี (x+[0-9]{4})'), parse: parser.none },
 				destination: { regex: compilePattern('ไปยัง ผู้ให้บริการ เบอร์บัญชี ([0-9]+)'), parse: parser.none },
 				amount: { regex: compilePattern('จำนวนเงิน ([0-9,.-]+) บาท'), parse: parser.amount },
-				date: { regex: compilePattern('วันและเวลาการทำรายการ: ([0-9]{1,2}.+[0-9]{4}) ณ ([0-9]{1,2}:[0-9]{2}:[0-9]{2})'), parse: parser.thaiDate }
+				date: { regex: compilePattern('วันและเวลาการทำรายการ: ([0-9]{1,2}.+[0-9]{4}) ณ ([0-9]{1,2}:[0-9]{2}:[0-9]{2})'), parse: thaiDateToISO }
 			},
 			extras: {
 				type: 'payment',
@@ -47,7 +47,7 @@ const patterns = {
 				source: { regex: compilePattern('จาก ธนาคารไทยพาณิชย์ เบอร์บัญชี (x+[0-9]{4})'), parse: parser.none },
 				destination: { regex: compilePattern('ไปยัง หมายเลขพร้อมเพย์ผู้รับเงิน ([0-9]+)'), parse: parser.none },
 				amount: { regex: compilePattern('จำนวนเงิน ([0-9,.-]+) บาท'), parse: parser.amount },
-				date: { regex: compilePattern('วันและเวลาการทำรายการ: ([0-9]{1,2}.+[0-9]{4}) ณ ([0-9]{1,2}:[0-9]{2}:[0-9]{2})'), parse: parser.thaiDate }
+				date: { regex: compilePattern('วันและเวลาการทำรายการ: ([0-9]{1,2}.+[0-9]{4}) ณ ([0-9]{1,2}:[0-9]{2}:[0-9]{2})'), parse: thaiDateToISO }
 			},
 			extras: {
 				type: "payment",
@@ -60,7 +60,7 @@ const patterns = {
 				source: { regex: compilePattern('จาก ธนาคารไทยพาณิชย์ เบอร์บัญชี (x+[0-9]{4})'), parse: parser.none },
 				destination: { regex: compilePattern('e-Wallet ID ([0-9]+)'), parse: parser.none },
 				amount: { regex: compilePattern('จำนวนเงิน ([0-9,.-]+) บาท'), parse: parser.amount },
-				date: { regex: compilePattern('วันและเวลาการทำรายการ: ([0-9]{1,2}.+[0-9]{4}) ณ ([0-9]{1,2}:[0-9]{2}:[0-9]{2})'), parse: parser.thaiDate }
+				date: { regex: compilePattern('วันและเวลาการทำรายการ: ([0-9]{1,2}.+[0-9]{4}) ณ ([0-9]{1,2}:[0-9]{2}:[0-9]{2})'), parse: thaiDateToISO }
 			},
 			extras: {
 				type: "payment",
@@ -74,7 +74,7 @@ const patterns = {
 				destination: { regex: compilePattern('ไปยัง [^\\s0-9]+ เบอร์บัญชี ([0-9]+)'), parse: parser.none },
 				destination_provider: { regex: compilePattern('ไปยัง ([^\\s0-9]+) เบอร์บัญชี [0-9]+'), parse: parser.none },
 				amount: { regex: compilePattern('จำนวนเงิน ([0-9,.-]+) บาท'), parse: parser.amount },
-				date: { regex: compilePattern('วันและเวลาการทำรายการ: ([0-9]{1,2}.+[0-9]{4}) ณ ([0-9]{1,2}:[0-9]{2}:[0-9]{2})'), parse: parser.thaiDate }
+				date: { regex: compilePattern('วันและเวลาการทำรายการ: ([0-9]{1,2}.+[0-9]{4}) ณ ([0-9]{1,2}:[0-9]{2}:[0-9]{2})'), parse: thaiDateToISO }
 			},
 			extras: {
 				type: "transfer",
@@ -83,7 +83,23 @@ const patterns = {
 		}
 	},
 	'K PLUS <KPLUS@kasikornbank.com>': {
-
+		transfer: {
+			regexs: {
+				source: { regex: compilePattern('From Account: ([x\\-0-9]+)'), parse: parser.none },
+				destination: { regex: compilePattern('To Account: ([\\-0-9]+)'), parse: parser.none },
+				destination_provider: { regex: compilePattern('To Bank: (.+)'), parse: parser.none },
+				destination_name: { regex: compilePattern('Account Name: (.+)'), parse: parser.none },
+				amount: { regex: compilePattern('Amount \\(THB\\): ([0-9,.-]+)'), parse: parser.amount },
+				fee: { regex: compilePattern('Fee \\(THB\\): ([0-9,.-]+)'), parse: parser.amount },
+				available_balance: { regex: compilePattern('Available Balance \\(THB\\): ([0-9,.-]+)'), parse: parser.amount },
+				transaction_id: { regex: compilePattern('Transaction Number: (.+)'), parse: parser.none },
+				date: { regex: compilePattern('Transaction Date: ([0-9]{1,2}/[0-9]{2}/[0-9]{4}) ([0-9]{1,2}:[0-9]{2}:[0-9]{2})'), parse: dmyDateToISO }
+			},
+			extras: {
+				type: "transfer",
+				source_provider: 'Kasikorn'
+			}
+		}
 	}
 }
 
@@ -91,9 +107,13 @@ export function mailToTransaction(mail) {
 	let mailObj = headerTokenizer(mail)
 	let patternMapping
 	switch (mailObj.From) {
-		case "SCB Easy <scbeasynet@scb.co.th>":
+		case 'SCB Easy <scbeasynet@scb.co.th>':
 			mailObj.body = scbBodyExtractor(mail)
 			patternMapping = scbPatternPicker(mailObj)
+			break;
+		case 'K PLUS <KPLUS@kasikornbank.com>':
+			mailObj.body = defaultBodyExtractor(mail)
+			patternMapping = kbankPatternPicker(mailObj)
 			break;
 	}
 	const output = { ...patternMapping.extras }
@@ -124,6 +144,12 @@ function headerTokenizer(mail) {
 	return output
 }
 
+function defaultBodyExtractor(mail) {
+	let body = mail.data.payload.body.data
+	body = Base64.decode(body)
+	return body
+}
+
 function scbBodyExtractor(mail) {
 	let body = mail.data.payload.parts[0].parts[0].body.data
 	body = Base64.decode(body).replace(/<td>|<\/td>|<tr>|<\/tr>|<BR>/g, ' ')
@@ -137,6 +163,15 @@ function scbPatternPicker(mailObj) {
 	if (mailObj.body.includes('เติมเงินพร้อมเพย์')) return patterns[mailObj.From]['payment_ewallet']
 	if (mailObj.body.includes('โอนเงินไปธนาคารอื่น')) return patterns[mailObj.From]['transfer']
 	throw new Error(`Subject not supported - sender: ${mailObj.From}, subject: ${mailObj.Subject}, link:${mailObj.url}`)
+}
+
+function kbankPatternPicker(mailObj) {
+	if (mailObj.body.includes('Result of Funds Transfer (Success)')) return patterns[mailObj.From]['transfer']
+}
+
+function dmyDateToISO(d) {
+	console.log(d)
+	return moment(d, 'DD/MM/YYYY hh:mm:ss').toDate()
 }
 
 function thaiDateToISO(thaiDate) {
