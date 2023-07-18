@@ -6,15 +6,16 @@ import moment from "moment"
 import { exit } from "process"
 
 async function gmailTest() {
-	let before = moment().format('YYYY/MM/DD')
+	// let before = moment().format('YYYY/MM/DD')
 	// let after = moment().add({ days: -1 }).format('YYYY/MM/DD')
-	// let after = moment().add({ days: -90 }).format('YYYY/MM/DD')
 	// let mails = await gmail.listMailIds({q: `label:money-transaction before:${before} after:${after} k plus` })
+	let mails = await gmail.listMailIds({ q: `label:money-transaction scb easy` })
 	// let mails = await gmail.listMailIds({ q: `label:money-transaction k plus` })
-	let mails = await gmail.listMailIds({ q: `label:money-transaction aisebill` })
+	// let mails = await gmail.listMailIds({ q: `label:money-transaction aisebill` })
 	console.log(mails, mails.length)
 	for (const [i, id] of mails.entries()) {
-		// if (i !== 10) continue
+		// if (i !== 24) continue
+		// if (i <= 29) continue
 		console.log(i, id)
 		let mail = await gmail.readMail(id)
 		// await fs.writeFileSync(`./tmp/testcase/kbank/mail${i}.json`, JSON.stringify(mail))
@@ -22,6 +23,7 @@ async function gmailTest() {
 			console.log(mailParser.mailToTransaction(mail))
 		} catch (e) {
 			console.log(e)
+			if (e.message.includes('แจ้งเตือนการเข้าสู่ระบบ')) continue
 			if (e.message.includes('new Terms')) continue
 			exit()
 		}
