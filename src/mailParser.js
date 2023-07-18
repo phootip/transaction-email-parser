@@ -18,74 +18,125 @@ const parser = {
 const patterns = {
 	'SCB Easy <scbeasynet@scb.co.th>': {
 		deposit_promptpay: {
-			source: { regex: compilePattern('จาก: ([^\\s]+) / (x+[0-9]{4})'), parse: parser.none },
-			destination: { regex: compilePattern('เข้าบัญชี: (x+[0-9]{4})'), parse: parser.addName('SCB') },
-			amount: { regex: compilePattern('จำนวน \\(บาท\\): ([0-9,.-]+)'), parse: parser.amount },
-			date: { regex: compilePattern('วัน/เวลา: ([0-9]{1,2}.+[0-9]{4}) - ([0-9]{1,2}:[0-9]{2})'), parse: parser.thaiDate }
+			regexs: {
+				source_provider: { regex: compilePattern('จาก: ([^\\s]+) / x+[0-9]{4}'), parse: parser.none },
+				source: { regex: compilePattern('จาก: [^\\s]+ / (x+[0-9]{4})'), parse: parser.none },
+				destination: { regex: compilePattern('เข้าบัญชี: (x+[0-9]{4})'), parse: parser.none },
+				amount: { regex: compilePattern('จำนวน \\(บาท\\): ([0-9,.-]+)'), parse: parser.amount },
+				date: { regex: compilePattern('วัน/เวลา: ([0-9]{1,2}.+[0-9]{4}) - ([0-9]{1,2}:[0-9]{2})'), parse: parser.thaiDate }
+			},
+			extras: {
+				type: 'deposit',
+				destination_provider: 'SCB'
+			}
 		},
 		payment: {
-			source: { regex: compilePattern('จาก ธนาคารไทยพาณิชย์ เบอร์บัญชี (x+[0-9]{4})'), parse: parser.addName('SCB') },
-			destination: { regex: compilePattern('ไปยัง [^\\s0-9]+ [^\\s0-9]* ([0-9]+)'), parse: parser.none },
-			amount: { regex: compilePattern('จำนวนเงิน ([0-9,.-]+) บาท'), parse: parser.amount },
-			date: { regex: compilePattern('วันและเวลาการทำรายการ: ([0-9]{1,2}.+[0-9]{4}) ณ ([0-9]{1,2}:[0-9]{2}:[0-9]{2})'), parse: parser.thaiDate }
+			regexs: {
+				source: { regex: compilePattern('จาก ธนาคารไทยพาณิชย์ เบอร์บัญชี (x+[0-9]{4})'), parse: parser.none },
+				destination: { regex: compilePattern('ไปยัง ผู้ให้บริการ เบอร์บัญชี ([0-9]+)'), parse: parser.none },
+				amount: { regex: compilePattern('จำนวนเงิน ([0-9,.-]+) บาท'), parse: parser.amount },
+				date: { regex: compilePattern('วันและเวลาการทำรายการ: ([0-9]{1,2}.+[0-9]{4}) ณ ([0-9]{1,2}:[0-9]{2}:[0-9]{2})'), parse: parser.thaiDate }
+			},
+			extras: {
+				type: 'payment',
+				source_provider: 'SCB'
+			}
 		},
 		payment_promptpay: {
-			source: { regex: compilePattern('จาก ธนาคารไทยพาณิชย์ เบอร์บัญชี (x+[0-9]{4})'), parse: parser.addName('SCB') },
-			destination: { regex: compilePattern('ไปยัง [^\\s0-9]+ ([0-9]+)'), parse: parser.addName('PromptPay') },
-			amount: { regex: compilePattern('จำนวนเงิน ([0-9,.-]+) บาท'), parse: parser.amount },
-			date: { regex: compilePattern('วันและเวลาการทำรายการ: ([0-9]{1,2}.+[0-9]{4}) ณ ([0-9]{1,2}:[0-9]{2}:[0-9]{2})'), parse: parser.thaiDate }
+			regexs: {
+				source: { regex: compilePattern('จาก ธนาคารไทยพาณิชย์ เบอร์บัญชี (x+[0-9]{4})'), parse: parser.none },
+				destination: { regex: compilePattern('ไปยัง หมายเลขพร้อมเพย์ผู้รับเงิน ([0-9]+)'), parse: parser.none },
+				amount: { regex: compilePattern('จำนวนเงิน ([0-9,.-]+) บาท'), parse: parser.amount },
+				date: { regex: compilePattern('วันและเวลาการทำรายการ: ([0-9]{1,2}.+[0-9]{4}) ณ ([0-9]{1,2}:[0-9]{2}:[0-9]{2})'), parse: parser.thaiDate }
+			},
+			extras: {
+				type: "payment",
+				source_provider: 'SCB',
+				destination_provider: 'PromptPay'
+			}
 		},
 		payment_ewallet: {
-			source: { regex: compilePattern('จาก ธนาคารไทยพาณิชย์ เบอร์บัญชี (x+[0-9]{4})'), parse: parser.addName('SCB') },
-			destination: { regex: compilePattern('e-Wallet ID ([0-9]+)'), parse: parser.addName('e-Wallet') },
-			amount: { regex: compilePattern('จำนวนเงิน ([0-9,.-]+) บาท'), parse: parser.amount },
-			date: { regex: compilePattern('วันและเวลาการทำรายการ: ([0-9]{1,2}.+[0-9]{4}) ณ ([0-9]{1,2}:[0-9]{2}:[0-9]{2})'), parse: parser.thaiDate }
+			regexs: {
+				source: { regex: compilePattern('จาก ธนาคารไทยพาณิชย์ เบอร์บัญชี (x+[0-9]{4})'), parse: parser.none },
+				destination: { regex: compilePattern('e-Wallet ID ([0-9]+)'), parse: parser.none },
+				amount: { regex: compilePattern('จำนวนเงิน ([0-9,.-]+) บาท'), parse: parser.amount },
+				date: { regex: compilePattern('วันและเวลาการทำรายการ: ([0-9]{1,2}.+[0-9]{4}) ณ ([0-9]{1,2}:[0-9]{2}:[0-9]{2})'), parse: parser.thaiDate }
+			},
+			extras: {
+				type: "payment",
+				source_provider: 'SCB',
+				destination_provider: 'e-Wallet'
+			}
+		},
+		transfer: {
+			regexs: {
+				source: { regex: compilePattern('จาก ธนาคารไทยพาณิชย์ เบอร์บัญชี (x+[0-9]{4})'), parse: parser.none },
+				destination: { regex: compilePattern('ไปยัง [^\\s0-9]+ เบอร์บัญชี ([0-9]+)'), parse: parser.none },
+				destination_provider: { regex: compilePattern('ไปยัง ([^\\s0-9]+) เบอร์บัญชี [0-9]+'), parse: parser.none },
+				amount: { regex: compilePattern('จำนวนเงิน ([0-9,.-]+) บาท'), parse: parser.amount },
+				date: { regex: compilePattern('วันและเวลาการทำรายการ: ([0-9]{1,2}.+[0-9]{4}) ณ ([0-9]{1,2}:[0-9]{2}:[0-9]{2})'), parse: parser.thaiDate }
+			},
+			extras: {
+				type: "transfer",
+				source_provider: 'SCB'
+			}
 		}
+	},
+	'K PLUS <KPLUS@kasikornbank.com>': {
+
 	}
 }
 
 export function mailToTransaction(mail) {
-	const mailObj = mailTokenizer(mail)
+	let mailObj = headerTokenizer(mail)
 	let patternMapping
 	switch (mailObj.From) {
 		case "SCB Easy <scbeasynet@scb.co.th>":
+			mailObj.body = scbBodyExtractor(mail)
 			patternMapping = scbPatternPicker(mailObj)
 			break;
 	}
-	const result = {}
-	for (const [key, pattern] of Object.entries(patternMapping)) {
+	const output = { ...patternMapping.extras }
+	// console.log(patternMapping)
+	// console.log(mailObj.body)
+	for (const [key, pattern] of Object.entries(patternMapping.regexs)) {
 		const values = pattern.regex.exec(mailObj.body)
 		if (!values) continue
 		const valuesString = values.slice(1).join(' ')
-		result[key] = pattern.parse(valuesString)
+		output[key] = pattern.parse(valuesString)
 	}
-	result.url = `https://mail.google.com/mail/#inbox/${mailObj.threadId}`
-	return result
+	output
+	output.url = mailObj.url
+	return output
 }
 
-function mailTokenizer(mail) {
-	let result = {
+function headerTokenizer(mail) {
+	let output = {
 		snippet: mail.data.snippet,
-		threadId: mail.data.threadId
+		threadId: mail.data.threadId,
 	}
 	for (const header of mail.data.payload.headers) {
-		if (header.name === "From") result.From = header.value
-		if (header.name === 'Subject') result.Subject = header.value
+		if (header.name === 'From') output.From = header.value
+		if (header.name === 'Subject') output.Subject = header.value
 	}
-	if (!(result.From in patterns)) throw new Error(`Sender not supported - ${result.From}`)
-	result.body = mail.data.payload.parts[0].parts[0].body.data
-	result.body = Base64.decode(result.body).replace(/<td>|<\/td>|<tr>|<\/tr>|<BR>/g, ' ')
-	fs.writeFileSync('./tmp/mail0_body.json',JSON.stringify(result.body))
-	// exit()
-	return result
+	if (!(output.From in patterns)) throw new Error(`Sender not supported - ${output.From}`)
+	output.url = `https://mail.google.com/mail/#inbox/${output.threadId}`
+	return output
 }
 
-function scbPatternPicker(mail) {
-	if (mail.body.includes('รับเงินผ่านรายการพร้อมเพย์')) return patterns[mail.From]['deposit_promptpay']
-	if (mail.body.includes('ชำระค่าสินค้าและบริการ')) return patterns[mail.From]['payment']
-	if (mail.body.includes('โอนเงินพร้อมเพย์')) return patterns[mail.From]['payment_promptpay']
-	if (mail.body.includes('เติมเงินพร้อมเพย์')) return patterns[mail.From]['payment_ewallet']
-	throw new Error(`Subject not supported - sender: ${mail.From}, subject: ${mail.Subject}`)
+function scbBodyExtractor(mail) {
+	let body = mail.data.payload.parts[0].parts[0].body.data
+	body = Base64.decode(body).replace(/<td>|<\/td>|<tr>|<\/tr>|<BR>/g, ' ')
+	return body
+}
+
+function scbPatternPicker(mailObj) {
+	if (mailObj.body.includes('รับเงินผ่านรายการพร้อมเพย์')) return patterns[mailObj.From]['deposit_promptpay']
+	if (mailObj.body.includes('ชำระค่าสินค้าและบริการ')) return patterns[mailObj.From]['payment']
+	if (mailObj.body.includes('โอนเงินพร้อมเพย์')) return patterns[mailObj.From]['payment_promptpay']
+	if (mailObj.body.includes('เติมเงินพร้อมเพย์')) return patterns[mailObj.From]['payment_ewallet']
+	if (mailObj.body.includes('โอนเงินไปธนาคารอื่น')) return patterns[mailObj.From]['transfer']
+	throw new Error(`Subject not supported - sender: ${mailObj.From}, subject: ${mailObj.Subject}, link:${mailObj.url}`)
 }
 
 function thaiDateToISO(thaiDate) {

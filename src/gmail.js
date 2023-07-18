@@ -65,10 +65,11 @@ async function saveObject(filename, obj) {
 	await fs.writeFile(`./tmp/${filename}.json`, payload)
 }
 
-async function listLabels() {
+export async function listLabels() {
 	const gmail = await getGmail()
 	const res = await gmail.users.labels.list({ userId: 'me', });
 	const labels = res.data.labels;
+	console.log(labels)
 	await saveObject('labels', labels)
 }
 
