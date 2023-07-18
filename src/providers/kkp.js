@@ -5,13 +5,13 @@ export default {
 	'Kiatnakin Phatra Bank <no-reply@kkpfg.com>': {
 		bodyExtractor: (mail, mailObj) => {
 			const body = mail.data.payload.body.data
-			if (!body) throw new Error(`bodyExtractor Failed - sender: ${mailObj.From}, subject: ${mailObj.Subject}, link:${mailObj.url}`)
+			if (!body) throw new Error(`bodyExtractor Failed - sender: ${mailObj.From}, subject: ${mailObj.Subject}, link:${mailObj.url}, ref:${mailObj.ref}`)
 			return Base64.decode(body)
 		},
 		patternPicker: function (mailObj) {
 			if (mailObj.body.includes('Result of Funds Transfer')) return this.patterns.transfer
 			if (mailObj.body.includes('Result of receiving Funds Transfer')) return this.patterns.deposit
-			throw new Error(`Subject not supported - sender: ${mailObj.From}, subject: ${mailObj.Subject}, link:${mailObj.url}`)
+			throw new Error(`Subject not supported - sender: ${mailObj.From}, subject: ${mailObj.Subject}, link:${mailObj.url}, ref:${mailObj.ref}`)
 		},
 		patterns: {
 			transfer: {

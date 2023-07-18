@@ -5,7 +5,7 @@ export default {
 	'<AISeBill@billing.ais.co.th>': {
 		bodyExtractor: (mail, mailObj) => {
 			const body = mail.data.payload.parts[0].body.data
-			if (!body) throw new Error(`bodyExtractor Failed - sender: ${mailObj.From}, subject: ${mailObj.Subject}, link:${mailObj.url}`)
+			if (!body) throw new Error(`bodyExtractor Failed - sender: ${mailObj.From}, subject: ${mailObj.Subject}, link:${mailObj.url}, ref:${mailObj.ref}`)
 			return Base64.decode(body).replace(/<[^>]*>|&nbsp;/g, ' ')
 		},
 		patternPicker: function () { return this.patterns.bill },

@@ -11,7 +11,7 @@ export default {
 	'SCB Easy <scbeasynet@scb.co.th>': {
 		bodyExtractor: (mail, mailObj) => {
 			const body = mail.data.payload.parts[0].parts[0].body.data
-			if (!body) throw new Error(`bodyExtractor Failed - sender: ${mailObj.From}, subject: ${mailObj.Subject}, link:${mailObj.url}`)
+			if (!body) throw new Error(`bodyExtractor Failed - sender: ${mailObj.From}, subject: ${mailObj.Subject}, link:${mailObj.url}, ref:${mailObj.ref}`)
 			return Base64.decode(body).replace(/<td>|<\/td>|<tr>|<\/tr>|<BR>/g, ' ')
 		},
 		patternPicker: function (mailObj) {
@@ -21,7 +21,7 @@ export default {
 			if (mailObj.body.includes('เติมเงินพร้อมเพย์')) return this.patterns.payment_ewallet
 			if (mailObj.body.includes('เติมเงิน')) return this.patterns.topup
 			if (mailObj.body.includes('โอนเงินไปธนาคารอื่น') || mailObj.body.includes('โอนเงินบัญชีบุคคลอื่นใน SCB')) return this.patterns.transfer
-			throw new Error(`Subject not supported - sender: ${mailObj.From}, subject: ${mailObj.Subject}, link:${mailObj.url}`)
+			throw new Error(`Subject not supported - sender: ${mailObj.From}, subject: ${mailObj.Subject}, link:${mailObj.url}, ref:${mailObj.ref}`)
 		},
 		patterns: {
 			deposit_promptpay: {

@@ -20,11 +20,12 @@ export function mailToTransaction(mail) {
 		// console.log(pattern.regex)
 		// console.log(values)
 		if (!values && pattern.optional === true) continue
-		if (!values) throw new Error(`regex exec return nothing, key:${key} - sender: ${mailObj.From}, subject: ${mailObj.Subject}, link:${mailObj.url}`)
+		if (!values) throw new Error(`regex exec return nothing, key:${key} - sender: ${mailObj.From}, subject: ${mailObj.Subject}, link:${mailObj.url}, ref:${mailObj.ref}`)
 		const valuesString = values.slice(1).join(' ')
 		output[key] = pattern.parse(valuesString)
 	}
 	output.url = mailObj.url
+	output.ref = mailObj.ref
 	return output
 }
 
@@ -36,9 +37,11 @@ function headerTokenizer(mail) {
 	for (const header of mail.data.payload.headers) {
 		if (header.name === 'From') output.From = header.value
 		if (header.name === 'Subject') output.Subject = header.value
+		if (header.name === 'Message-ID' || header.name === 'Message-Id') output.id = header.value
 	}
 	if (!(output.From in providers)) throw new Error(`Sender not supported - ${output.From}`)
 	output.url = `https://mail.google.com/mail/#inbox/${output.threadId}`
+	output.ref = `rfc822msgid:${output.id}`
 	return output
 }
 

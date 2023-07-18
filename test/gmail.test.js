@@ -10,16 +10,16 @@ async function gmailTest() {
 	// let after = moment().add({ days: -1 }).format('YYYY/MM/DD')
 	// let mails = await gmail.listMailIds({q: `label:money-transaction before:${before} after:${after} k plus` })
 	// let mails = await gmail.listMailIds({ q: `label:money-transaction scb easy` })
-	// let mails = await gmail.listMailIds({ q: `label:money-transaction k plus` })
+	let mails = await gmail.listMailIds({ q: `label:money-transaction k plus` })
 	// let mails = await gmail.listMailIds({ q: `label:money-transaction aisebill` })
-	let mails = await gmail.listMailIds({ q: `label:money-transaction kkp` })
+	// let mails = await gmail.listMailIds({ q: `label:money-transaction kkp` })
 	console.log(mails, mails.length)
 	for (const [i, id] of mails.entries()) {
-		// if (i !== 0) continue
+		if (i !== 77) continue
 		// if (i < 79) continue
 		console.log(i, id)
 		let mail = await gmail.readMail(id)
-		// await fs.writeFileSync(`./tmp/testcase/kkp/mail${i}.json`, JSON.stringify(mail))
+		// await fs.writeFileSync(`./tmp/testcase/kbank/mail${i}.json`, JSON.stringify(mail))
 		try {
 			console.log(mailParser.mailToTransaction(mail))
 		} catch (e) {
