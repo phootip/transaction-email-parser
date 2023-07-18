@@ -52,11 +52,6 @@ function headerTokenizer(mail) {
 	return output
 }
 
-function defaultBodyExtractor(mail) {
-	let body = mail.data.payload.body.data
-	body = Base64.decode(body)
-	return body
-}
 
 
 function kbankPatternPicker(mailObj) {

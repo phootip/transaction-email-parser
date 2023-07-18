@@ -4,7 +4,7 @@ import { Base64 } from 'js-base64';
 export default {
 	'SCB Easy <scbeasynet@scb.co.th>': {
 		bodyExtractor: (mail) => {
-			let body = mail.data.payload.parts[0].parts[0].body.data
+			const body = mail.data.payload.parts[0].parts[0].body.data
 			return Base64.decode(body).replace(/<td>|<\/td>|<tr>|<\/tr>|<BR>/g, ' ')
 		},
 		patternPicker: function (mailObj) {
