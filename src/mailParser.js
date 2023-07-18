@@ -58,21 +58,6 @@ function defaultBodyExtractor(mail) {
 	return body
 }
 
-function scbBodyExtractor(mail) {
-	let body = mail.data.payload.parts[0].parts[0].body.data
-	body = Base64.decode(body).replace(/<td>|<\/td>|<tr>|<\/tr>|<BR>/g, ' ')
-	return body
-}
-
-
-function scbPatternPicker(mailObj) {
-	if (mailObj.body.includes('รับเงินผ่านรายการพร้อมเพย์')) return providers[mailObj.From]['deposit_promptpay']
-	if (mailObj.body.includes('ชำระค่าสินค้าและบริการ')) return providers[mailObj.From]['payment']
-	if (mailObj.body.includes('โอนเงินพร้อมเพย์')) return providers[mailObj.From]['payment_promptpay']
-	if (mailObj.body.includes('เติมเงินพร้อมเพย์')) return providers[mailObj.From]['payment_ewallet']
-	if (mailObj.body.includes('โอนเงินไปธนาคารอื่น')) return providers[mailObj.From]['transfer']
-	throw new Error(`Subject not supported - sender: ${mailObj.From}, subject: ${mailObj.Subject}, link:${mailObj.url}`)
-}
 
 function kbankPatternPicker(mailObj) {
 	if (mailObj.body.includes('Result of Funds Transfer (Success)')) return providers[mailObj.From]['transfer']

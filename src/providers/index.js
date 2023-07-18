@@ -1,74 +1,10 @@
 import {parser, compilePattern} from './parser.js'
 import aisPattern from './ais.js'
-import ais from './ais.js'
+
+import scb from './scb.js'
 
 export default {
-	'SCB Easy <scbeasynet@scb.co.th>': {
-		deposit_promptpay: {
-			regexs: {
-				source_provider: { regex: compilePattern('จาก: ([^\\s]+) / x+[0-9]{4}'), parse: parser.none },
-				source: { regex: compilePattern('จาก: [^\\s]+ / (x+[0-9]{4})'), parse: parser.none },
-				destination: { regex: compilePattern('เข้าบัญชี: (x+[0-9]{4})'), parse: parser.none },
-				amount: { regex: compilePattern('จำนวน \\(บาท\\): ([0-9,.-]+)'), parse: parser.amount },
-				date: { regex: compilePattern('วัน/เวลา: ([0-9]{1,2}.+[0-9]{4}) - ([0-9]{1,2}:[0-9]{2})'), parse: parser.thaiDateToISO }
-			},
-			extras: {
-				type: 'deposit',
-				destination_provider: 'SCB'
-			}
-		},
-		payment: {
-			regexs: {
-				source: { regex: compilePattern('จาก ธนาคารไทยพาณิชย์ เบอร์บัญชี (x+[0-9]{4})'), parse: parser.none },
-				destination: { regex: compilePattern('ไปยัง ผู้ให้บริการ เบอร์บัญชี ([0-9]+)'), parse: parser.none },
-				amount: { regex: compilePattern('จำนวนเงิน ([0-9,.-]+) บาท'), parse: parser.amount },
-				date: { regex: compilePattern('วันและเวลาการทำรายการ: ([0-9]{1,2}.+[0-9]{4}) ณ ([0-9]{1,2}:[0-9]{2}:[0-9]{2})'), parse: parser.thaiDateToISO }
-			},
-			extras: {
-				type: 'payment',
-				source_provider: 'SCB'
-			}
-		},
-		payment_promptpay: {
-			regexs: {
-				source: { regex: compilePattern('จาก ธนาคารไทยพาณิชย์ เบอร์บัญชี (x+[0-9]{4})'), parse: parser.none },
-				destination: { regex: compilePattern('ไปยัง หมายเลขพร้อมเพย์ผู้รับเงิน ([0-9]+)'), parse: parser.none },
-				amount: { regex: compilePattern('จำนวนเงิน ([0-9,.-]+) บาท'), parse: parser.amount },
-				date: { regex: compilePattern('วันและเวลาการทำรายการ: ([0-9]{1,2}.+[0-9]{4}) ณ ([0-9]{1,2}:[0-9]{2}:[0-9]{2})'), parse: parser.thaiDateToISO }
-			},
-			extras: {
-				type: 'payment',
-				source_provider: 'SCB',
-				destination_provider: 'PromptPay'
-			}
-		},
-		payment_ewallet: {
-			regexs: {
-				source: { regex: compilePattern('จาก ธนาคารไทยพาณิชย์ เบอร์บัญชี (x+[0-9]{4})'), parse: parser.none },
-				destination: { regex: compilePattern('e-Wallet ID ([0-9]+)'), parse: parser.none },
-				amount: { regex: compilePattern('จำนวนเงิน ([0-9,.-]+) บาท'), parse: parser.amount },
-				date: { regex: compilePattern('วันและเวลาการทำรายการ: ([0-9]{1,2}.+[0-9]{4}) ณ ([0-9]{1,2}:[0-9]{2}:[0-9]{2})'), parse: parser.thaiDateToISO }
-			},
-			extras: {
-				type: 'payment',
-				source_provider: 'SCB',
-				destination_provider: 'e-Wallet'
-			}
-		},
-		transfer: {
-			regexs: {
-				source: { regex: compilePattern('จาก ธนาคารไทยพาณิชย์ เบอร์บัญชี (x+[0-9]{4})'), parse: parser.none },
-				destination: { regex: compilePattern('ไปยัง [^\\s0-9]+ เบอร์บัญชี ([0-9]+)'), parse: parser.none },
-				destination_provider: { regex: compilePattern('ไปยัง ([^\\s0-9]+) เบอร์บัญชี [0-9]+'), parse: parser.none },
-				amount: { regex: compilePattern('จำนวนเงิน ([0-9,.-]+) บาท'), parse: parser.amount },
-				date: { regex: compilePattern('วันและเวลาการทำรายการ: ([0-9]{1,2}.+[0-9]{4}) ณ ([0-9]{1,2}:[0-9]{2}:[0-9]{2})'), parse: parser.thaiDateToISO }
-			},
-			extras: {
-				type: 'transfer',
-				source_provider: 'SCB'
-			}
-		}
-	},
+	...scb,
 	'K PLUS <KPLUS@kasikornbank.com>': {
 		transfer: {
 			regexs: {

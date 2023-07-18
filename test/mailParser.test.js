@@ -6,11 +6,11 @@ import moment from "moment"
 import { exit } from "process"
 
 async function mailParser_test() {
-	for (let i of Array(100).keys()) {
+	for (let i of Array(7).keys()) {
 		console.log('testcase: ' + i)
 		try {
 			// let rawdata = fs.readFileSync(`./test/testcase_data/mail${i}.json`);
-			let rawdata = fs.readFileSync(`./tmp/testcase/mail${i}.json`);
+			let rawdata = fs.readFileSync(`./tmp/testcase/scb/mail${i}.json`);
 			let mail = JSON.parse(rawdata);
 			let result = mailParser.mailToTransaction(mail)
 			// let expect = fs.readFileSync(`./test/testcase_expect/${i}.json`)
@@ -18,7 +18,7 @@ async function mailParser_test() {
 			// console.log(_.isEqual(JSON.parse(JSON.stringify(result)),JSON.parse(expect)))
 			console.log(result)
 		} catch (e) {
-			console.log(e.message)
+			console.log(e)
 		}
 	}
 }
