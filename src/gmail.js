@@ -3,30 +3,15 @@ import * as path from 'path';
 import * as fs from 'fs/promises';
 import { authenticate } from '@google-cloud/local-auth';
 import { google } from 'googleapis';
-// import { gmail } from 'googleapis/build/src/apis/gmail';
+import config from './config.js';
 
 // If modifying these scopes, delete token.json.
 const SCOPES = ['https://www.googleapis.com/auth/gmail.readonly'];
-// The file token.json stores the user's access and refresh tokens, and is
-// created automatically when the authorization flow completes for the first
-// time.
-let TOKEN_PATH = path.join(process.cwd(), 'credentials/token.json');
-let CREDENTIALS_PATH = path.join(process.cwd(), 'credentials/credentials.json');
 var Gmail = null;
-
-export function setTokenPath(path) {
-	if(!path) return
-	TOKEN_PATH = path
-}
-
-export function setCredentialsPath(path){
-	if(!path) return
-	CREDENTIALS_PATH = path
-}
 
 async function loadSavedCredentialsIfExist() {
 	try {
-		const content = await fs.readFile(TOKEN_PATH);
+		const content = await fs.readFile(config.TOKEN_PATH);
 		const credentials = JSON.parse(content);
 		return google.auth.fromJSON(credentials);
 	} catch (err) {
@@ -35,7 +20,7 @@ async function loadSavedCredentialsIfExist() {
 }
 
 async function saveCredentials(client) {
-	const content = await fs.readFile(CREDENTIALS_PATH);
+	const content = await fs.readFile(config.CREDENTIALS_PATH);
 	const keys = JSON.parse(content);
 	const key = keys.installed || keys.web;
 	const payload = JSON.stringify({
@@ -44,7 +29,7 @@ async function saveCredentials(client) {
 		client_secret: key.client_secret,
 		refresh_token: client.credentials.refresh_token,
 	});
-	await fs.writeFile(TOKEN_PATH, payload);
+	await fs.writeFile(config.TOKEN_PATH, payload);
 }
 
 async function authorize() {
@@ -54,7 +39,7 @@ async function authorize() {
 	}
 	client = await authenticate({
 		scopes: SCOPES,
-		keyfilePath: CREDENTIALS_PATH,
+		keyfilePath: config.CREDENTIALS_PATH,
 	});
 	if (client.credentials) {
 		await saveCredentials(client);
@@ -106,7 +91,7 @@ export async function watcher() {
 	const gmail = await getGmail()
 	let request = {
 		'labelIds': ['INBOX'],
-		'topicName': 'projects/budget-tracker-392713/topics/gmail',
+		'topicName': config.PUBSUB_TOPIC,
 		'labelFilterBehavior': 'INCLUDE'
 	}
 	const res = await gmail.users.watch({userId:'me', ...request})
