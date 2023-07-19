@@ -10,9 +10,19 @@ const SCOPES = ['https://www.googleapis.com/auth/gmail.readonly'];
 // The file token.json stores the user's access and refresh tokens, and is
 // created automatically when the authorization flow completes for the first
 // time.
-const TOKEN_PATH = path.join(process.cwd(), 'credentials/token.json');
-const CREDENTIALS_PATH = path.join(process.cwd(), 'credentials/credentials.json');
+let TOKEN_PATH = path.join(process.cwd(), 'credentials/token.json');
+let CREDENTIALS_PATH = path.join(process.cwd(), 'credentials/credentials.json');
 var Gmail = null;
+
+export function setTokenPath(path) {
+	if(!path) return
+	TOKEN_PATH = path
+}
+
+export function setCredentialsPath(path){
+	if(!path) return
+	CREDENTIALS_PATH = path
+}
 
 async function loadSavedCredentialsIfExist() {
 	try {
@@ -46,7 +56,6 @@ async function authorize() {
 		scopes: SCOPES,
 		keyfilePath: CREDENTIALS_PATH,
 	});
-	// console.log(client)
 	if (client.credentials) {
 		await saveCredentials(client);
 	}
