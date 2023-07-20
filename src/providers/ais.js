@@ -12,11 +12,11 @@ export default {
 		patterns: {
 			bill: {
 				regexs: {
-					amount: { regex: compilePattern('(?:Total Current Charge|รวมค่าใช้บริการรอบปัจจุบัน) ([0-9,.-]+) (?:Baht|บาท)'), parse: parser.amount },
+					amount: { regex: compilePattern('(?:Total Current Charge|รวมค่าใช้บริการรอบปัจจุบัน) ([0-9,.-]+) (?:Baht|บาท)'), parse: parser.debit },
 				},
 				extras: {
 					type: 'bill',
-					source_provider: 'AIS'
+					provider: 'AIS'
 				}
 			},
 		}

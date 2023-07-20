@@ -1,6 +1,10 @@
 import { parser, compilePattern } from './parser.js'
 import { Base64 } from 'js-base64';
 
+const commonPattern = {
+	amount: { regex: compilePattern('Amount \\(THB\\) : ([0-9,.-]+)'), parse: parser.credit },
+	date: { regex: compilePattern('Transaction date : ([0-9]{1,2}/[0-9]{2}/[0-9]{4}) - ([0-9]{1,2}:[0-9]{2})'), parse: parser.dmyDateToISO }
+}
 export default {
 	'Kiatnakin Phatra Bank <no-reply@kkpfg.com>': {
 		bodyExtractor: (mail, mailObj) => {
@@ -16,24 +20,22 @@ export default {
 		patterns: {
 			withdrawal: {
 				regexs: {
-					source: { regex: compilePattern('From Account : ([Xx\\-0-9]+)'), parse: parser.none },
-					amount: { regex: compilePattern('Amount \\(THB\\) : ([0-9,.-]+)'), parse: parser.amount },
-					date: { regex: compilePattern('Transaction date : ([0-9]{1,2}/[0-9]{2}/[0-9]{4}) - ([0-9]{1,2}:[0-9]{2})'), parse: parser.dmyDateToISO }
+					account: { regex: compilePattern('From Account : ([Xx\\-0-9]+)'), parse: parser.none },
+					...commonPattern
 				},
 				extras: {
 					type: 'withdrawal',
-					source_provider: 'KKP'
+					provider: 'KKP'
 				}
 			},
 			deposit: {
 				regexs: {
-					destination: { regex: compilePattern('Into account : ([Xx\\-0-9]+)'), parse: parser.none },
-					amount: { regex: compilePattern('Amount \\(THB\\) : ([0-9,.-]+)'), parse: parser.amount },
-					date: { regex: compilePattern('Transaction date : ([0-9]{1,2}/[0-9]{2}/[0-9]{4}) - ([0-9]{1,2}:[0-9]{2})'), parse: parser.dmyDateToISO }
+					account: { regex: compilePattern('Into account : ([Xx\\-0-9]+)'), parse: parser.none },
+					...commonPattern
 				},
 				extras: {
 					type: 'deposit',
-					source_provider: 'KKP'
+					provider: 'KKP'
 				}
 			},
 		},
