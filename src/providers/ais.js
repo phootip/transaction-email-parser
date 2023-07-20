@@ -16,7 +16,7 @@ export default {
 				},
 				extras: {
 					type: 'bill',
-					provider: 'AIS'
+					source_provider: 'AIS'
 				}
 			},
 		}
