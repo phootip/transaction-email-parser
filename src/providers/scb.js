@@ -2,8 +2,8 @@ import { parser, compilePattern } from './parser.js'
 import { Base64 } from 'js-base64';
 
 const commonPattern = {
-	source: { regex: compilePattern('จาก ธนาคารไทยพาณิชย์ เบอร์บัญชี (x+[0-9]{4})'), parse: parser.none },
-	amount: { regex: compilePattern('จำนวนเงิน ([0-9,.-]+) บาท'), parse: parser.amount },
+	account: { regex: compilePattern('จาก ธนาคารไทยพาณิชย์ เบอร์บัญชี (x+[0-9]{4})'), parse: parser.none },
+	amount: { regex: compilePattern('จำนวนเงิน ([0-9,.-]+) บาท'), parse: parser.debit },
 	date: { regex: compilePattern('วันและเวลาการทำรายการ: ([0-9]{1,2}.+[0-9]{4}) ณ ([0-9]{1,2}:[0-9]{2}:[0-9]{2})'), parse: parser.thaiDateToISO }
 }
 
@@ -26,69 +26,69 @@ export default {
 		patterns: {
 			deposit_promptpay: {
 				regexs: {
-					source_provider: { regex: compilePattern('จาก: ([^\\s]+) / x+[0-9]{4}'), parse: parser.none },
-					source: { regex: compilePattern('จาก: [^\\s]+ / (x+[0-9]{4})'), parse: parser.none },
-					destination: { regex: compilePattern('เข้าบัญชี: (x+[0-9]{4})'), parse: parser.none },
-					amount: { regex: compilePattern('จำนวน \\(บาท\\): ([0-9,.-]+)'), parse: parser.amount },
+					opposing_provider: { regex: compilePattern('จาก: ([^\\s]+) / x+[0-9]{4}'), parse: parser.none },
+					opposing_account: { regex: compilePattern('จาก: [^\\s]+ / (x+[0-9]{4})'), parse: parser.none },
+					account: { regex: compilePattern('เข้าบัญชี: (x+[0-9]{4})'), parse: parser.none },
+					amount: { regex: compilePattern('จำนวน \\(บาท\\): ([0-9,.-]+)'), parse: parser.credit },
 					date: { regex: compilePattern('วัน/เวลา: ([0-9]{1,2}.+[0-9]{4}) - ([0-9]{1,2}:[0-9]{2})'), parse: parser.thaiDateToISO }
 				},
 				extras: {
 					type: 'deposit',
-					destination_provider: 'SCB'
+					provider: 'SCB'
 				}
 			},
 			withdrawal: {
 				regexs: {
 					...commonPattern,
-					destination: { regex: compilePattern('ไปยัง ผู้ให้บริการ เบอร์บัญชี ([0-9]+)'), parse: parser.none },
+					opposing_account: { regex: compilePattern('ไปยัง ผู้ให้บริการ เบอร์บัญชี ([0-9]+)'), parse: parser.none },
 				},
 				extras: {
 					type: 'withdrawal',
-					source_provider: 'SCB'
+					provider: 'SCB'
 				}
 			},
 			withdrawal_promptpay: {
 				regexs: {
 					...commonPattern,
-					destination: { regex: compilePattern('ไปยัง หมายเลขพร้อมเพย์ผู้รับเงิน ([0-9]+)'), parse: parser.none },
+					opposing_account: { regex: compilePattern('ไปยัง หมายเลขพร้อมเพย์ผู้รับเงิน ([0-9]+)'), parse: parser.none },
 				},
 				extras: {
 					type: 'withdrawal',
-					source_provider: 'SCB',
-					destination_provider: 'PromptPay'
+					provider: 'SCB',
+					opposing_provider: 'PromptPay'
 				}
 			},
 			withdrawal_ewallet: {
 				regexs: {
 					...commonPattern,
-					destination: { regex: compilePattern('e-Wallet ID ([0-9]+)'), parse: parser.none },
+					opposing_account: { regex: compilePattern('e-Wallet ID ([0-9]+)'), parse: parser.none },
 				},
 				extras: {
 					type: 'withdrawal',
-					source_provider: 'SCB',
-					destination_provider: 'e-Wallet'
+					provider: 'SCB',
+					opposing_provider: 'e-Wallet'
 				}
 			},
 			withdrawal_scb: {
 				regexs: {
 					...commonPattern,
-					destination: { regex: compilePattern('ไปยัง [^\\s0-9]+ เบอร์บัญชี ([0-9]+)'), parse: parser.none },
-					destination_provider: { regex: compilePattern('ไปยัง ([^\\s0-9]+) เบอร์บัญชี [0-9]+'), parse: parser.none },
+					opposing_account: { regex: compilePattern('ไปยัง [^\\s0-9]+ เบอร์บัญชี ([0-9]+)'), parse: parser.none },
 				},
 				extras: {
 					type: 'withdrawal',
-					source_provider: 'SCB'
+					provider: 'SCB',
+					opposing_provider: 'SCB'
 				}
 			},
 			withdrawal_topup: {
 				regexs: {
 					...commonPattern,
-					destination: { regex: compilePattern('ไปยัง ([^\\s]+)'), parse: parser.none },
-					destination_name: { regex: compilePattern('หมายเลขโทรศัพท์/หมายเลขอ้างอิง ([0-9]+)'), parse: parser.none },
+					opposing_account: { regex: compilePattern('ไปยัง ([^\\s]+)'), parse: parser.none },
+					opposing_provider: { regex: compilePattern('หมายเลขโทรศัพท์/หมายเลขอ้างอิง ([0-9]+)'), parse: parser.none },
 				},
 				extras: {
 					type: 'withdrawal',
-					source_provider: 'SCB'
+					provider: 'SCB'
 				}
 			}
 		},

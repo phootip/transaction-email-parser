@@ -4,6 +4,8 @@ export const parser = {
 	none: (text) => text,
 	addName: (name) => (text) => name + ' ' + text,
 	amount: (text) => parseFloat(text.replace(',', '')),
+	credit: (text) => parseFloat(text.replace(',', '')),
+	debit: (text) => -parseFloat(text.replace(',', '')),
 	dmyDateToISO: (text) => moment(text, 'DD/MM/YYYY hh:mm:ss').toDate(),
 	thaiDateToISO: (thaiDate) => {
 		var monthNamesThai = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
