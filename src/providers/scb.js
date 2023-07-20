@@ -83,8 +83,8 @@ export default {
 			withdrawal_topup: {
 				regexs: {
 					...commonPattern,
-					opposing_account: { regex: compilePattern('ไปยัง ([^\\s]+)'), parse: parser.none },
-					opposing_provider: { regex: compilePattern('หมายเลขโทรศัพท์/หมายเลขอ้างอิง ([0-9]+)'), parse: parser.none },
+					opposing_provider: { regex: compilePattern('ไปยัง ([^\\s]+)'), parse: parser.none },
+					opposing_account: { regex: compilePattern('หมายเลขโทรศัพท์/หมายเลขอ้างอิง ([0-9]+)'), parse: parser.none },
 				},
 				extras: {
 					type: 'withdrawal',

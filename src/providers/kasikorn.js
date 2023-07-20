@@ -1,6 +1,14 @@
 import { parser, compilePattern } from './parser.js'
 import { Base64 } from 'js-base64';
 
+const commonPattern = {
+	amount: { regex: compilePattern('Amount \\(THB\\): ([0-9,.-]+)'), parse: parser.debit },
+	fee: { regex: compilePattern('Fee \\(THB\\): ([0-9,.-]+)'), parse: parser.debit },
+	available_balance: { regex: compilePattern('Available Balance \\(THB\\): ([0-9,.-]+)'), parse: parser.amount },
+	transaction_id: { regex: compilePattern('Transaction Number: (.+)'), parse: parser.none },
+	date: { regex: compilePattern('Transaction Date: ([0-9]{1,2}/[0-9]{2}/[0-9]{4}) ([0-9]{1,2}:[0-9]{2}:[0-9]{2})'), parse: parser.dmyDateToISO }
+}
+
 export default {
 	'K PLUS <KPLUS@kasikornbank.com>': {
 		bodyExtractor: (mail, mailObj) => {
@@ -17,52 +25,41 @@ export default {
 		patterns: {
 			withdrawal: {
 				regexs: {
-					source: { regex: compilePattern('From Account: ([x\\-0-9]+)'), parse: parser.none },
-					destination: { regex: compilePattern('To Account: ([\\-0-9]+)'), parse: parser.none },
-					destination_provider: { regex: compilePattern('To Bank: (.+)'), parse: parser.none },
-					destination_name: { regex: compilePattern('Account Name: (.+)'), parse: parser.none },
-					amount: { regex: compilePattern('Amount \\(THB\\): ([0-9,.-]+)'), parse: parser.amount },
-					fee: { regex: compilePattern('Fee \\(THB\\): ([0-9,.-]+)'), parse: parser.amount },
-					available_balance: { regex: compilePattern('Available Balance \\(THB\\): ([0-9,.-]+)'), parse: parser.amount },
-					transaction_id: { regex: compilePattern('Transaction Number: (.+)'), parse: parser.none },
-					date: { regex: compilePattern('Transaction Date: ([0-9]{1,2}/[0-9]{2}/[0-9]{4}) ([0-9]{1,2}:[0-9]{2}:[0-9]{2})'), parse: parser.dmyDateToISO }
+					account: { regex: compilePattern('From Account: ([x\\-0-9]+)'), parse: parser.none },
+					opposing_account: { regex: compilePattern('To Account: ([\\-0-9]+)'), parse: parser.none },
+					opposing_provider: { regex: compilePattern('To Bank: (.+)'), parse: parser.none },
+					opposing_account_name: { regex: compilePattern('Account Name: (.+)'), parse: parser.none },
+					...commonPattern
 				},
 				extras: {
 					type: 'withdrawal',
-					source_provider: 'Kasikorn'
+					provider: 'Kasikorn'
 				}
 			},
 			withdrawal_promptpay: {
 				regexs: {
-					source: { regex: compilePattern('From Account: ([x\\-0-9]+)'), parse: parser.none },
-					destination: { regex: compilePattern('To (?:PromptPay|Wallet) ID: ([x\\-0-9]+)'), parse: parser.none },
-					destination_name: { regex: compilePattern('(?:Received|Wallet) Name: (.+)'), parse: parser.none },
-					amount: { regex: compilePattern('Amount \\(THB\\): ([0-9,.-]+)'), parse: parser.amount },
-					fee: { regex: compilePattern('Fee \\(THB\\): ([0-9,.-]+)'), parse: parser.amount },
-					available_balance: { regex: compilePattern('Available Balance \\(THB\\): ([0-9,.-]+)'), parse: parser.amount },
-					transaction_id: { regex: compilePattern('Transaction Number: (.+)'), parse: parser.none },
-					date: { regex: compilePattern('Transaction Date: ([0-9]{1,2}/[0-9]{2}/[0-9]{4}) ([0-9]{1,2}:[0-9]{2}:[0-9]{2})'), parse: parser.dmyDateToISO }
+					account: { regex: compilePattern('From Account: ([x\\-0-9]+)'), parse: parser.none },
+					opposing_account: { regex: compilePattern('To (?:PromptPay|Wallet) ID: ([x\\-0-9]+)'), parse: parser.none },
+					opposing_account_name: { regex: compilePattern('(?:Received|Wallet) Name: (.+)'), parse: parser.none },
+					...commonPattern
 				},
 				extras: {
 					type: 'withdrawal',
-					source_provider: 'Kasikorn',
-					destination_provider: 'Promptpay'
+					provider: 'Kasikorn',
+					opposing_provider: 'Promptpay'
 				}
 			},
 			withdrawal_bill: {
 				regexs: {
-					source: { regex: compilePattern('Paid From Account: ([x\\-0-9]+)'), parse: parser.none },
-					destination: { regex: compilePattern('MerchantID : (.+)'), parse: parser.none, optional: true },
-					destination_name: { regex: compilePattern('Company Name: (.+)'), parse: parser.none },
-					amount: { regex: compilePattern('Amount \\(THB\\): ([0-9,.-]+)'), parse: parser.amount },
-					fee: { regex: compilePattern('Fee \\(THB\\): ([0-9,.-]+)'), parse: parser.amount },
-					available_balance: { regex: compilePattern('Available Balance \\(THB\\): ([0-9,.-]+)'), parse: parser.amount },
-					transaction_id: { regex: compilePattern('Transaction Number: (.+)'), parse: parser.none },
-					date: { regex: compilePattern('Transaction Date: ([0-9]{1,2}/[0-9]{2}/[0-9]{4}) ([0-9]{1,2}:[0-9]{2}:[0-9]{2})'), parse: parser.dmyDateToISO }
+					account: { regex: compilePattern('Paid From Account: ([x\\-0-9]+)'), parse: parser.none },
+					opposing_account: { regex: compilePattern('MerchantID : (.+)'), parse: parser.none, optional: true },
+					opposing_account_name: { regex: compilePattern('Company Name: (.+)'), parse: parser.none },
+					...commonPattern
 				},
 				extras: {
 					type: 'withdrawal',
-					source_provider: 'Kasikorn',
+					provider: 'Kasikorn',
+					opposing_provider: 'Bill'
 				}
 			}
 		},
