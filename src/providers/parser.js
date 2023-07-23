@@ -1,12 +1,12 @@
 import moment from 'moment';
 
 export const parser = {
-	none: (text) => text,
-	addName: (name) => (text) => name + ' ' + text,
-	amount: (text) => parseFloat(text.replace(',', '')),
-	credit: (text) => parseFloat(text.replace(',', '')),
-	debit: (text) => -parseFloat(text.replace(',', '')),
-	dmyDateToISO: (text) => moment(text, 'DD/MM/YYYY hh:mm:ss').toDate(),
+	none: (text) => text.trim(),
+	addName: (name) => (text) => name + ' ' + text.trim(),
+	amount: (text) => parseFloat(text.trim().replace(',', '')),
+	credit: (text) => parseFloat(text.trim().replace(',', '')),
+	debit: (text) => -parseFloat(text.trim().replace(',', '')),
+	dmyDateToISO: (text) => moment(text.trim(), 'DD/MM/YYYY hh:mm:ss').toDate(),
 	thaiDateToISO: (thaiDate) => {
 		var monthNamesThai = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
 		var monthNamesEng = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
@@ -18,8 +18,15 @@ export const parser = {
 		// engDate.splice(3, 1)
 		return moment(engDate.join(' '), 'DD MMM YYYY hh:mm:ss').toDate()
 	},
+	mailDate: (text) => moment(text, 'ddd, DD MMM YYYY hh:mm:ss').toDate()
 }
 
 export const compilePattern = (pattern) => {
 	return new RegExp(pattern.split(/\s+/).join('\\s*'))
+}
+
+export const commonRegex = {
+	any: '(.+)',
+	dmy: '([0-9]{1,2}/[0-9]{2}/[0-9]{4})',
+	hms: '([0-9]{1,2}:[0-9]{2}:[0-9]{2})',
 }
