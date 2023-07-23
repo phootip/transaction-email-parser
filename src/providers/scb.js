@@ -1,10 +1,10 @@
-import { parser, compilePattern } from './parser.js'
+import { parser, compilePattern, commonRegex } from './parser.js'
 import { Base64 } from 'js-base64';
 
 const commonPattern = {
 	account: { regex: compilePattern('จาก ธนาคารไทยพาณิชย์ เบอร์บัญชี (x+[0-9]{4})'), parse: parser.none },
-	amount: { regex: compilePattern('จำนวนเงิน ([0-9,.-]+) บาท'), parse: parser.debit },
-	date: { regex: compilePattern('วันและเวลาการทำรายการ: ([0-9]{1,2}.+[0-9]{4}) ณ ([0-9]{1,2}:[0-9]{2}:[0-9]{2})'), parse: parser.thaiDateToISO }
+	amount: { regex: compilePattern(`จำนวนเงิน ${commonRegex.amount} บาท`), parse: parser.debit },
+	date: { regex: compilePattern(`วันและเวลาการทำรายการ: ${commonRegex.thaiDate} ณ ${commonRegex.hms}`), parse: parser.thaiDateToISO }
 }
 
 export default {
@@ -29,8 +29,8 @@ export default {
 					opposing_provider: { regex: compilePattern('จาก: ([^\\s]+) / x+[0-9]{4}'), parse: parser.none },
 					opposing_account: { regex: compilePattern('จาก: [^\\s]+ / (x+[0-9]{4})'), parse: parser.none },
 					account: { regex: compilePattern('เข้าบัญชี: (x+[0-9]{4})'), parse: parser.none },
-					amount: { regex: compilePattern('จำนวน \\(บาท\\): ([0-9,.-]+)'), parse: parser.credit },
-					date: { regex: compilePattern('วัน/เวลา: ([0-9]{1,2}.+[0-9]{4}) - ([0-9]{1,2}:[0-9]{2})'), parse: parser.thaiDateToISO }
+					amount: { regex: compilePattern(`จำนวน \\(บาท\\): ${commonRegex.amount}`), parse: parser.credit },
+					date: { regex: compilePattern(`วัน/เวลา: ${commonRegex.thaiDate} - ${commonRegex.hm}`), parse: parser.thaiDateToISO }
 				},
 				extras: {
 					type: 'deposit',
@@ -40,7 +40,7 @@ export default {
 			withdrawal: {
 				regexs: {
 					...commonPattern,
-					opposing_account: { regex: compilePattern('ไปยัง ผู้ให้บริการ เบอร์บัญชี ([0-9]+)'), parse: parser.none },
+					opposing_account: { regex: compilePattern(`ไปยัง ผู้ให้บริการ เบอร์บัญชี ${commonRegex.number}`), parse: parser.none },
 				},
 				extras: {
 					type: 'withdrawal',
@@ -50,7 +50,7 @@ export default {
 			withdrawal_promptpay: {
 				regexs: {
 					...commonPattern,
-					opposing_account: { regex: compilePattern('ไปยัง หมายเลขพร้อมเพย์ผู้รับเงิน ([0-9]+)'), parse: parser.none },
+					opposing_account: { regex: compilePattern(`ไปยัง หมายเลขพร้อมเพย์ผู้รับเงิน ${commonRegex.number}`), parse: parser.none },
 				},
 				extras: {
 					type: 'withdrawal',
@@ -61,7 +61,7 @@ export default {
 			withdrawal_ewallet: {
 				regexs: {
 					...commonPattern,
-					opposing_account: { regex: compilePattern('e-Wallet ID ([0-9]+)'), parse: parser.none },
+					opposing_account: { regex: compilePattern(`e-Wallet ID ${commonRegex.number}`), parse: parser.none },
 				},
 				extras: {
 					type: 'withdrawal',
@@ -72,7 +72,7 @@ export default {
 			withdrawal_scb: {
 				regexs: {
 					...commonPattern,
-					opposing_account: { regex: compilePattern('ไปยัง [^\\s0-9]+ เบอร์บัญชี ([0-9]+)'), parse: parser.none },
+					opposing_account: { regex: compilePattern(`ไปยัง [^\\s0-9]+ เบอร์บัญชี ${commonRegex.number}`), parse: parser.none },
 				},
 				extras: {
 					type: 'withdrawal',
@@ -84,7 +84,7 @@ export default {
 				regexs: {
 					...commonPattern,
 					opposing_provider: { regex: compilePattern('ไปยัง ([^\\s]+)'), parse: parser.none },
-					opposing_account: { regex: compilePattern('หมายเลขโทรศัพท์/หมายเลขอ้างอิง ([0-9]+)'), parse: parser.none },
+					opposing_account: { regex: compilePattern(`หมายเลขโทรศัพท์/หมายเลขอ้างอิง ${commonRegex.number}`), parse: parser.none },
 				},
 				extras: {
 					type: 'withdrawal',

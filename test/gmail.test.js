@@ -6,7 +6,7 @@ import moment from "moment"
 import { exit } from "process"
 
 // const bank_list = ['scb easy', 'k plus', 'kkp', 'aisebill', 'onlineservice']
-const bank_list = ['onlineservice']
+const bank_list = ['scb easy', 'onlineservice']
 const limit = 20
 
 async function gmailTest() {
@@ -15,7 +15,7 @@ async function gmailTest() {
 		let mails = await gmail.listMailIds({ q: `label:money-transaction ${bank}` })
 		console.log(mails, mails.length)
 		for (const [i, id] of mails.entries()) {
-			if (i !== 12) continue
+			// if (i !== 12) continue
 			// if (i < 79) continue
 			if (i >= limit) break
 			console.log(i, id)
@@ -30,7 +30,7 @@ async function gmailTest() {
 				if (e.message.includes('KTC Bill Payment Successful')) continue
 				if (e.message.includes('Onlineservice@ktc.co.th')) continue
 				if (e.message.includes('new Terms')) continue
-				exit()
+				// exit()
 			}
 		}
 	}

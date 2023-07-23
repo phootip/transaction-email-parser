@@ -27,6 +27,10 @@ export const compilePattern = (pattern) => {
 
 export const commonRegex = {
 	any: '(.+)',
+	number: '([0-9]+)',
+	amount: '([0-9,.-]+)',
 	dmy: '([0-9]{1,2}/[0-9]{2}/[0-9]{4})',
 	hms: '([0-9]{1,2}:[0-9]{2}:[0-9]{2})',
+	hm: '([0-9]{1,2}:[0-9]{2})',
+	thaiDate: '([0-9]{1,2}.+[0-9]{4})'
 }
