@@ -69,10 +69,12 @@ console.log(csvText)
   },
 ]
 ```
-note that id can be use to search on gmail webpage with `rfc822msgid:{id}`
+For more example, take a look at `./test/example.js`, `gmail.test.js`. Then try `npm run example`, `npm run test`
+
+> **_NOTE:_** id can be use to search on gmail webpage with `rfc822msgid:{id}`
 
 # Support Provider
-We only support Thai Bank right now, if you want a new providers to be add, sent me an email sample or open a PR to add them
+We only support Thai Banks right now, if you want a new providers to be add, sent me an email sample or open a PR to add them
 - AIS
 - Kasikorn
 - KKP: Kiatnakin Phatra Bank
