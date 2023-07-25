@@ -18,10 +18,11 @@
     "jest": "^29.6.1",
     "lodash": "^4.17.21"
   },
+  "version": "0.1.0",
   "type": "module",
   "main": "./src/index.js",
   "name": "transaction-email-parser",
-  "description": "A JS library that can be used to parse transaction information from EMail messages.",
+  "description": "used to parse transaction information from EMail messages.",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/phootip/transaction-email-parser"
