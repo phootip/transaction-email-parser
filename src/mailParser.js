@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import { content_v2_1 } from 'googleapis';
 import { Base64 } from 'js-base64';
 import { exit } from 'process';
-import moment from 'moment';
+import dayjs from 'dayjs';
 
 import {parser} from './providers/parser.js'
 import providers from './providers/index.js'
@@ -48,11 +48,12 @@ function headerTokenizer(mail) {
 	return output
 }
 
-export function toCSV(mails, headers) {
+const default_headers = [	"type", "provider", "account", "opposing_provider", "opposing_account", "amount", "date", "id", "url"]
+export function toCSV(mails, headers=default_headers) {
 	const array = [headers].concat(mails.map(obj => {
 		const output = []
 		for (const key of headers) {
-			if (key === 'date') output.push(moment(obj[key]).format())
+			if (key === 'date') output.push(dayjs(obj[key]).format())
 			else if (!(key in obj)) output.push('')
 			else output.push(obj[key].toString())
 		}
