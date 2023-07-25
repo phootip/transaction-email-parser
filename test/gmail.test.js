@@ -20,7 +20,7 @@ async function gmailTest() {
 			if (i >= limit) break
 			console.log(i, id)
 			let mail = await gmail.readMail(id)
-			await fs.writeFileSync(`./tmp/testcase/ktc/mail${i}.json`, JSON.stringify(mail))
+			// await fs.writeFileSync(`./tmp/testcase/ktc/mail${i}.json`, JSON.stringify(mail))
 			try {
 				console.log(mailParser.mailToTransaction(mail))
 			} catch (e) {

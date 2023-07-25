@@ -2,6 +2,7 @@ import * as fs from 'fs';
 import { content_v2_1 } from 'googleapis';
 import { Base64 } from 'js-base64';
 import { exit } from 'process';
+import moment from 'moment';
 
 import {parser} from './providers/parser.js'
 import providers from './providers/index.js'
@@ -10,7 +11,7 @@ export function mailToTransaction(mail) {
 	let mailObj = headerTokenizer(mail)
 	let provider = providers[mailObj.From]
 	mailObj.body = provider.bodyExtractor(mail, mailObj)
-	fs.writeFileSync(`./tmp/testcase/ktc/body.json`, mailObj.body)
+	// fs.writeFileSync(`./tmp/testcase/ktc/body.json`, mailObj.body)
 	let patternMapping = provider.patternPicker(mailObj)
 
 	const output = { ...patternMapping.extras }
@@ -47,8 +48,18 @@ function headerTokenizer(mail) {
 	return output
 }
 
+export function toCSV(mails, headers) {
+	const array = [headers].concat(mails.map(obj => {
+		const output = []
+		for (const key of headers) {
+			if (key === 'date') output.push(moment(obj[key]).format())
+			else if (!(key in obj)) output.push('')
+			else output.push(obj[key].toString())
+		}
+		return output
+	}))
 
-
-function kbankPatternPicker(mailObj) {
-	if (mailObj.body.includes('Result of Funds Transfer (Success)')) return providers[mailObj.From]['transfer']
+	return array.map(x => {
+		return x.join(',')
+	}).join('\n')
 }
