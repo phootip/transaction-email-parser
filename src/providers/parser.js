@@ -1,4 +1,4 @@
-import moment from 'moment';
+import dayjs from 'dayjs';
 
 export const parser = {
 	none: (text) => text.trim(),
@@ -6,7 +6,7 @@ export const parser = {
 	amount: (text) => parseFloat(text.trim().replace(',', '')),
 	credit: (text) => parseFloat(text.trim().replace(',', '')),
 	debit: (text) => -parseFloat(text.trim().replace(',', '')),
-	dmyDateToISO: (text) => moment(text.trim(), 'DD/MM/YYYY hh:mm:ss').toDate(),
+	dmyDateToISO: (text) => dayjs(text.trim(), 'DD/MM/YYYY hh:mm:ss').toDate(),
 	thaiDateToISO: (thaiDate) => {
 		var monthNamesThai = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
 		var monthNamesEng = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
@@ -16,9 +16,9 @@ export const parser = {
 		engDate[2] = parseInt(thaiDate[2]) - 543
 		engDate[1] = monthNamesEng[idx]
 		// engDate.splice(3, 1)
-		return moment(engDate.join(' '), 'DD MMM YYYY hh:mm:ss').toDate()
+		return dayjs(engDate.join(' '), 'DD MMM YYYY hh:mm:ss').toDate()
 	},
-	mailDate: (text) => moment(text, 'ddd, DD MMM YYYY hh:mm:ss').toDate()
+	mailDate: (text) => dayjs(text, 'ddd, DD MMM YYYY hh:mm:ss').toDate()
 }
 
 export const compilePattern = (pattern) => {
