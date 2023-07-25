@@ -13,29 +13,58 @@ const mailParser = MailParser()
 // or set custom token/credential path
 const mailParser = MailParser({{TOKEN_PATH:'/custom/path/token.json', CREDENTIALS_PATH:'/custom/path/credentials.json}})
 
+const params = { q: `label:money-transaction` }
 const ids = mailParser.listMailIds(params)
-const mail = await gmail.readMail(ids)
+const transactions = []
+for (const [i, id] of mails.entries()) {
+	const mail = await gmail.readMail(id)
+	transactions.push(mailParser.mailToTransaction(mail))
+}
 
 const transactions = mailParser.mailToTransaction(mail)
-// Example: Kasikorn 
+
+const csvText = mailParser.toCSV(transactions)
+// or csv with selected headers
+const csvText = mailParser.toCSV(transactions,['provider','account','date'])
+```
+
+```
+// Example: mail 
+
 // Dear Customer of mobile number 08-XXXX-1234
 // Subject: Result of PromptPay Funds Transfer (Success)
 
 // With reference to your request for funds transfer via K PLUS Service as follows:
 
-//         Transaction Date: 23/07/2023  20:47:18
+//         Transaction Date: 11/07/2023  11:22:33
 //         Transaction Number: 111111111111ABA22222
 //         From Account: xxx-x-x4321-x
 //         To PromptPay ID: xxx-xxx-1234
 //         Received Name: MR. AAA BBBBB
 //         Amount (THB): 3.00
+//         Fee (THB): 0.00
+//         Available Balance (THB): 2,333.00
 
-// output:
- 
-const csvText = mailParser.toCSV(transactions)
-// or csv with selected headers
-const csvText = mailParser.toCSV(transactions,['provider','account','date'])
+// output: mailToTransaction(mail)
+[
+  {
+    type: 'withdrawal',
+    provider: 'Kasikorn',
+    opposing_provider: 'Promptpay',
+    account: 'xxx-x-x4321-x',
+    opposing_account: 'xxx-xxx-1234',
+    opposing_account_name: 'MR. AAA BBBBB',
+    amount: -3,
+    fee: -0,
+    available_balance: 2333,
+    transaction_id: '111111111111ABA22222',
+    date: 2023-07-11T11:22:33.000Z,
+    url: 'https://mail.google.com/mail/#inbox/555555abc55de555',
+    id: '<22222EFG2222.ABC333333333@something-something>'
+  },
+]
 ```
+note that id can be use to search on gmail webpage with `rfc822msgid:{id}`
 
 # Support Provider
 We only support Thai Bank right now, if you want a new providers to be add, sent me an email sample or open a PR to add them
