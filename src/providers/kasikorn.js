@@ -6,7 +6,7 @@ const commonPattern = {
 	fee: { regex: compilePattern('Fee \\(THB\\): ([0-9,.-]+)'), parse: parser.debit },
 	available_balance: { regex: compilePattern('Available Balance \\(THB\\): ([0-9,.-]+)'), parse: parser.amount },
 	transaction_id: { regex: compilePattern('Transaction Number: (.+)'), parse: parser.none },
-	date: { regex: compilePattern('Transaction Date: ([0-9]{1,2}/[0-9]{2}/[0-9]{4}) ([0-9]{1,2}:[0-9]{2}:[0-9]{2})'), parse: parser.dmyDateToISO }
+	date: { regex: compilePattern('Transaction Date: ([0-9]{1,2}/[0-9]{2}/[0-9]{4}) ([0-9]{1,2}:[0-9]{2}:[0-9]{2})'), parse: parser.dmyhmsToISO }
 }
 
 export default {

@@ -19,7 +19,7 @@ export default {
 			withdrawal: {
 				regexs: {
 					account: { regex: compilePattern('KTC Credit Card Number: ([Xx\\-0-9]+)'), parse: parser.none },
-					opposing_account: {regex: compilePattern(`Merchant Name: ${commonRegex.any}`), parse: parser.none},
+					opposing_account: { regex: compilePattern(`Merchant Name: ${commonRegex.any}`), parse: parser.none },
 					amount: { regex: compilePattern('Amount: ([0-9,.-]+) THB'), parse: parser.debit },
 					// date
 				},
@@ -31,9 +31,9 @@ export default {
 			deposit: {
 				regexs: {
 					account: { regex: compilePattern('Card no.: ([Xx\\s\\-0-9]+)'), parse: parser.none },
-					opposing_account: {regex: compilePattern(`Account no.: ([\\*0-9]+) ([\\*0-9]+)`), parse: parser.none},
+					opposing_account: { regex: compilePattern(`Account no.: ([\\*0-9]+) ([\\*0-9]+)`), parse: parser.none },
 					amount: { regex: compilePattern('amount: ([0-9,.-]+) THB'), parse: parser.credit },
-					date: {regex: compilePattern(`Transaction date: ${commonRegex.dmy} at ${commonRegex.hms} hrs.`), parse: parser.dmyDateToISO}
+					date: { regex: compilePattern(`Transaction date: ${commonRegex.dmy} at ${commonRegex.hms} hrs.`), parse: parser.dmyhmsToISO }
 				},
 				extras: {
 					type: 'deposit',

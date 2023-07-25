@@ -2,7 +2,7 @@ import { parser, compilePattern } from './parser.js'
 import { Base64 } from 'js-base64';
 
 const commonPattern = {
-	date: { regex: compilePattern('Transaction date : ([0-9]{1,2}/[0-9]{2}/[0-9]{4}) - ([0-9]{1,2}:[0-9]{2})'), parse: parser.dmyDateToISO }
+	date: { regex: compilePattern('Transaction date : ([0-9]{1,2}/[0-9]{2}/[0-9]{4}) - ([0-9]{1,2}:[0-9]{2})'), parse: parser.dmyhmToISO }
 }
 export default {
 	'Kiatnakin Phatra Bank <no-reply@kkpfg.com>': {

@@ -9,23 +9,28 @@ Requires google credentials, [link](https://developers.google.com/gmail/api/quic
 # API
 ```
 import MailParser from 'transaction-email-parser'
+
 const mailParser = MailParser()
 // or set custom token/credential path
 const mailParser = MailParser({{TOKEN_PATH:'/custom/path/token.json', CREDENTIALS_PATH:'/custom/path/credentials.json}})
 
-const params = { q: `label:money-transaction` }
-const ids = mailParser.listMailIds(params)
+const params = { q: `k plus` }
+const ids = await mailParser.listMailIds(params)
 const transactions = []
-for (const [i, id] of mails.entries()) {
-	const mail = await gmail.readMail(id)
-	transactions.push(mailParser.mailToTransaction(mail))
+for (const [i, id] of ids.entries()) {
+	if (i>10) break
+	const mail = await mailParser.readMail(id)
+	try {
+		transactions.push(mailParser.mailToTransaction(mail))
+	} catch(e) {
+		console.log(e.message)
+	}
 }
-
-const transactions = mailParser.mailToTransaction(mail)
 
 const csvText = mailParser.toCSV(transactions)
 // or csv with selected headers
-const csvText = mailParser.toCSV(transactions,['provider','account','date'])
+// const csvText = mailParser.toCSV(transactions,['provider','account','date'])
+console.log(csvText)
 ```
 
 ```

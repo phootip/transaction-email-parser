@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "test": "jest"
+    "example": "node ./test/example.js",
+    "test": "node ./test/gmail.test.js"
   },
   "dependencies": {
     "@actual-app/api": "^6.1.0",

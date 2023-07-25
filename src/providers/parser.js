@@ -8,19 +8,20 @@ export const parser = {
 	amount: (text) => parseFloat(text.trim().replace(',', '')),
 	credit: (text) => parseFloat(text.trim().replace(',', '')),
 	debit: (text) => -parseFloat(text.trim().replace(',', '')),
-	dmyDateToISO: (text) => dayjs(text.trim(), 'DD/MM/YYYY hh:mm:ss').toDate(),
+	dmyhmsToISO: (text) => dayjs(text.trim(), 'DD/MM/YYYY hh:mm:ss').toDate(),
+	dmyhmToISO: (text) => dayjs(text.trim(), 'DD/MM/YYYY hh:mm').toDate(),
 	thaiDateToISO: (thaiDate) => {
 		var monthNamesThai = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
-		var monthNamesEng = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
+		var monthNamesEng = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
 		thaiDate = thaiDate.split(' ')
 		let idx = monthNamesThai.indexOf(thaiDate[1])
 		let engDate = thaiDate
 		engDate[2] = parseInt(thaiDate[2]) - 543
 		engDate[1] = monthNamesEng[idx]
-		// engDate.splice(3, 1)
+		console.log(engDate.join(' '))
 		return dayjs(engDate.join(' '), 'DD MMM YYYY hh:mm:ss').toDate()
 	},
-	mailDate: (text) => dayjs(text, 'ddd, DD MMM YYYY hh:mm:ss').toDate()
+	mailDate: (text) => dayjs(text, ['DD MMM YYYY hh:mm:ss ZZ','ddd, DD MMM YYYY hh:mm:ss']).toDate()
 }
 
 export const compilePattern = (pattern) => {
