@@ -1,7 +1,4 @@
-import * as fs from 'fs';
-import { content_v2_1 } from 'googleapis';
 import { Base64 } from 'js-base64';
-import { exit } from 'process';
 import dayjs from 'dayjs';
 
 import {parser} from './providers/parser.js'
@@ -11,13 +8,11 @@ export function mailToTransaction(mail) {
 	let mailObj = headerTokenizer(mail)
 	let provider = providers[mailObj.From]
 	mailObj.body = provider.bodyExtractor(mail, mailObj)
-	// fs.writeFileSync(`./tmp/testcase/ktc/body.json`, mailObj.body)
 	let patternMapping = provider.patternPicker(mailObj)
 
 	const output = { ...patternMapping.extras }
 	for (const [key, pattern] of Object.entries(patternMapping.regexs)) {
 		const values = pattern.regex.exec(mailObj.body)
-		// console.log(values)
 		if (!values && pattern.optional === true) continue
 		if (!values) throw new Error(`regex exec return nothing, key:${key} - sender: ${mailObj.From}, subject: ${mailObj.Subject}, link:${mailObj.url}, ref:${mailObj.ref}`)
 		const valuesString = values.slice(1).join(' ')

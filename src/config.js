@@ -1,7 +1,6 @@
-import * as path from 'path'
 const config = {
-	TOKEN_PATH: path.join(process.cwd(), 'credentials/token.json'),
-	CREDENTIALS_PATH: path.join(process.cwd(), 'credentials/credentials.json'),
+	TOKEN_PATH: 'credentials/token.json',
+	CREDENTIALS_PATH: 'credentials/credentials.json',
 	PUBSUB_TOPIC: '',
 	PUBSUB_SUB: ''
 }
