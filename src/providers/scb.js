@@ -9,6 +9,7 @@ const commonPattern = {
 
 export default {
 	'SCB Easy <scbeasynet@scb.co.th>': {
+		altName: ['scbeasynet@scb.co.th'],
 		bodyExtractor: (mail, mailObj) => {
 			const body = mail.data.payload.parts[0].parts[0].body.data
 			if (!body) throw new Error(`bodyExtractor Failed - sender: ${mailObj.From}, subject: ${mailObj.Subject}, link:${mailObj.url}, ref:${mailObj.ref}`)

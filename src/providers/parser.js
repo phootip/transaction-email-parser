@@ -18,7 +18,6 @@ export const parser = {
 		let engDate = thaiDate
 		engDate[2] = parseInt(thaiDate[2]) - 543
 		engDate[1] = monthNamesEng[idx]
-		console.log(engDate.join(' '))
 		return dayjs(engDate.join(' '), ['DD MMM YYYY hh:mm:ss','DD MMM YYYY hh:mm']).toDate()
 	},
 	mailDate: (text) => dayjs(text, ['DD MMM YYYY hh:mm:ss ZZ','ddd, DD MMM YYYY hh:mm:ss']).toDate()
