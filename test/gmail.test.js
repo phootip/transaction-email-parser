@@ -5,11 +5,11 @@ import _ from 'lodash'
 import dayjs from "dayjs"
 import { exit } from "process"
 
-const bank_list = ['scb easy', 'k plus', 'kkp', 'aisebill', 'onlineservice']
-// const bank_list = ['aisebill']
-const label = 'INBOX'
-// const label = 'money-transaction'
-const limit = 20
+// const bank_list = ['scb easy', 'k plus', 'kkp', 'aisebill', 'onlineservice']
+const bank_list = ['scb easy']
+// const label = 'INBOX'
+const label = 'money-transaction'
+const limit = 5
 
 async function gmailTest() {
 	for (const bank of bank_list) {
@@ -24,7 +24,9 @@ async function gmailTest() {
 			let mail = await gmail.readMail(id)
 			// await fs.writeFileSync(`./tmp/testcase/ktc/mail${i}.json`, JSON.stringify(mail))
 			try {
-				console.log(mailParser.mailToTransaction(mail))
+				let transaction = mailParser.mailToTransaction(mail)
+				console.log(transaction)
+				if (Object.prototype.toString.call(d) === "[object Date]" && isNaN(d)) { throw new Error(`Date not valid!`); exit(); }
 			} catch (e) {
 				console.log(e.message)
 			}
