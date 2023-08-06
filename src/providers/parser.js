@@ -5,6 +5,7 @@ dayjs.extend(customParseFormat)
 export const parser = {
 	none: (text) => text.trim(),
 	addName: (name) => (text) => name + ' ' + text.trim(),
+	url: (id) => `https://mail.google.com/mail/#inbox/${id}`,
 	amount: (text) => parseFloat(text.trim().replace(',', '')),
 	credit: (text) => parseFloat(text.trim().replace(',', '')),
 	debit: (text) => -parseFloat(text.trim().replace(',', '')),
@@ -18,9 +19,10 @@ export const parser = {
 		let engDate = thaiDate
 		engDate[2] = parseInt(thaiDate[2]) - 543
 		engDate[1] = monthNamesEng[idx]
-		return dayjs(engDate.join(' '), ['DD MMM YYYY hh:mm:ss','DD MMM YYYY hh:mm']).toDate()
+		console.log(engDate)
+		return dayjs(engDate.join(' '), ['D MMM YYYY hh:mm:ss','D MMM YYYY hh:mm']).toDate()
 	},
-	mailDate: (text) => dayjs(text, ['DD MMM YYYY hh:mm:ss ZZ','ddd, DD MMM YYYY hh:mm:ss']).toDate()
+	mailDate: (text) => dayjs(text, ['D MMM YYYY hh:mm:ss ZZ','ddd, D MMM YYYY hh:mm:ss']).toDate()
 }
 
 export const compilePattern = (pattern) => {

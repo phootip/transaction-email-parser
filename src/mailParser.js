@@ -4,6 +4,7 @@ import _ from "lodash";
 
 import { parser } from "./providers/parser.js";
 import providers from "./providers/index.js";
+import textRegex from "./providers/text.js";
 
 export function mailToTransaction(mail) {
   let mailObj = headerTokenizer(mail);
@@ -11,16 +12,22 @@ export function mailToTransaction(mail) {
   mailObj.body = provider.bodyExtractor(mail, mailObj);
   let patternMapping = provider.patternPicker(mailObj);
 
-  const output = { ...patternMapping.extras };
-  for (const [key, pattern] of Object.entries(patternMapping.regexs)) {
-    const values = pattern.regex.exec(mailObj.body);
-    if (!values && pattern.optional === true) continue;
-    if (!values)
-      throw new Error(
-        `regex exec return nothing, key:${key} - sender: ${mailObj.From}, subject: ${mailObj.Subject}, link:${mailObj.url}, ref:${mailObj.ref}`
-      );
-    const valuesString = values.slice(1).join(" ");
-    output[key] = pattern.parse(valuesString);
+  // const output = { ...patternMapping.extras };
+  // for (const [key, pattern] of Object.entries(patternMapping.regexs)) {
+  //   const values = pattern.regex.exec(mailObj.body);
+  //   if (!values && pattern.optional === true) continue;
+  //   if (!values)
+  //     throw new Error(
+  //       `regex exec return nothing, key:${key} - sender: ${mailObj.From}, subject: ${mailObj.Subject}, link:${mailObj.url}, ref:${mailObj.ref}`
+  //     );
+  //   const valuesString = values.slice(1).join(" ");
+  //   output[key] = pattern.parse(valuesString);
+  // }
+  const output = {
+    ...patternMapping.extras,
+    ...executeRegexs(patternMapping.regexs, mailObj.body),
+    url: mailObj.url,
+    id: mailObj.id
   }
   output.url = mailObj.url;
   output.id = mailObj.id;
@@ -35,30 +42,36 @@ export function textToTransaction(text) {
   for (const [sender, p] of Object.entries(providers)) {
     if (_.some(p.altName, (el) => _.includes(text, el))) {
       provider = p;
-			break
+      break;
     }
   }
-	const patternMapping = provider.patternPicker({body:text})
+  const noHTMLtext = text.replace(/<[^>]*>|&nbsp;/g, ' ')
+  const patternMapping = provider.patternPicker({ body: noHTMLtext });
+  const output = {
+    ...patternMapping.extras,
+    ...executeRegexs(patternMapping.regexs, noHTMLtext),
+    ...executeRegexs(textRegex, text)
+  }
+  // TODO: implement default date
+  return output;
+}
 
-  const output = { ...patternMapping.extras };
-  for (const [key, pattern] of Object.entries(patternMapping.regexs)) {
+function executeRegexs(regexs, text) {
+  const output = {}
+  for (const [key, pattern] of Object.entries(regexs)) {
     const values = pattern.regex.exec(text);
     if (!values && pattern.optional === true) continue;
-    if (!values)
-      throw new Error(
-        `regex exec return nothing, key:${key}`
-      );
+    if (!values) throw new Error(`regex exec return nothing, key:${key}`);
     const valuesString = values.slice(1).join(" ");
     output[key] = pattern.parse(valuesString);
   }
-	// TODO: implement default date
-  return output;
+  return output
 }
 
 function headerTokenizer(mail) {
   let output = {
     snippet: mail.data.snippet,
-    threadId: mail.data.threadId,
+    legacyId: mail.data.id,
   };
   for (const header of mail.data.payload.headers) {
     if (header.name === "From") output.From = header.value;
@@ -69,7 +82,7 @@ function headerTokenizer(mail) {
   }
   if (!(output.From in providers))
     throw new Error(`Sender not supported - ${output.From}`);
-  output.url = `https://mail.google.com/mail/#inbox/${output.threadId}`;
+  output.url = `https://mail.google.com/mail/#inbox/${output.legacyId}`;
   output.ref = `rfc822msgid:${output.id}`;
   return output;
 }
