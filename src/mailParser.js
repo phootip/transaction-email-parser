@@ -12,47 +12,38 @@ export function mailToTransaction(mail) {
   mailObj.body = provider.bodyExtractor(mail, mailObj);
   let patternMapping = provider.patternPicker(mailObj);
 
-  // const output = { ...patternMapping.extras };
-  // for (const [key, pattern] of Object.entries(patternMapping.regexs)) {
-  //   const values = pattern.regex.exec(mailObj.body);
-  //   if (!values && pattern.optional === true) continue;
-  //   if (!values)
-  //     throw new Error(
-  //       `regex exec return nothing, key:${key} - sender: ${mailObj.From}, subject: ${mailObj.Subject}, link:${mailObj.url}, ref:${mailObj.ref}`
-  //     );
-  //   const valuesString = values.slice(1).join(" ");
-  //   output[key] = pattern.parse(valuesString);
-  // }
   const output = {
     ...patternMapping.extras,
     ...executeRegexs(patternMapping.regexs, mailObj.body),
     url: mailObj.url,
-    id: mailObj.id
+    id: mailObj.id,
+    legacyId: mailObj.legacyId,
   }
-  output.url = mailObj.url;
-  output.id = mailObj.id;
   if (!("date" in output)) {
     output.date = parser.mailDate(mailObj.Date);
   }
   return output;
 }
 
-export function textToTransaction(text) {
+export function textToTransaction(text,legacyId) {
   let provider = null;
   for (const [sender, p] of Object.entries(providers)) {
-    if (_.some(p.altName, (el) => _.includes(text, el))) {
+    if (text.includes(sender) || _.some(p.altName, (el) => _.includes(text, el))) {
       provider = p;
       break;
     }
   }
-  const noHTMLtext = text.replace(/<[^>]*>|&nbsp;/g, ' ')
+  // text = text.replace('<wbr>','')
+  const noHTMLtext = text.replace(/<[^>]*>|&nbsp;/g, '')
   const patternMapping = provider.patternPicker({ body: noHTMLtext });
   const output = {
     ...patternMapping.extras,
     ...executeRegexs(patternMapping.regexs, noHTMLtext),
-    ...executeRegexs(textRegex, text)
+    ...executeRegexs(textRegex, text),
+    // legacyId,
+    // url: `https://mail.google.com/mail/#inbox/${legacyId}`
   }
-  // TODO: implement default date
+  output.url = `https://mail.google.com/mail/#inbox/${output.legacyId}`
   return output;
 }
 

@@ -11,6 +11,7 @@ const commonPattern = {
 
 export default {
 	'K PLUS <KPLUS@kasikornbank.com>': {
+		altName: ['KPLUS@kasikornbank.com'],
 		bodyExtractor: (mail, mailObj) => {
 			const body = mail.data.payload.body.data
 			if (!body) throw new Error(`bodyExtractor Failed - sender: ${mailObj.From}, subject: ${mailObj.Subject}, link:${mailObj.url}, ref:${mailObj.ref}`)

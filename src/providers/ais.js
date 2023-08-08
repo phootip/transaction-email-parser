@@ -3,6 +3,7 @@ import { Base64 } from 'js-base64';
 
 export default {
 	'<AISeBill@billing.ais.co.th>': {
+		altName: ['AISeBill@billing.ais.co.th'],
 		bodyExtractor: (mail, mailObj) => {
 			const body = mail.data.payload.parts[0].body.data
 			if (!body) throw new Error(`bodyExtractor Failed - sender: ${mailObj.From}, subject: ${mailObj.Subject}, link:${mailObj.url}, ref:${mailObj.ref}`)
