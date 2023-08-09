@@ -12,6 +12,7 @@ const label = 'money-transaction'
 const limit = 20
 
 async function gmailTest() {
+	console.log('test')
 	for (const bank of bank_list) {
 		console.log(`testing bank: ${bank}`)
 		let mails = await gmail.listMailIds({ q: `label:${label} ${bank}` })
@@ -36,6 +37,7 @@ async function gmailTest() {
 			}
 		}
 	}
+
 }
 
 gmailTest()

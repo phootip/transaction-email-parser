@@ -2,7 +2,19 @@
   "compilerOptions": {
     "outDir": "./lib",
     "allowJs": true,
-    "target": "es5"
+    "target": "es5",
+    "esModuleInterop": true,
+    "module": "ESNext",
+    "moduleResolution": "Node"
   },
-  "include": ["./src/**/*"]
+  "ts-node": {
+    "esm": true,
+    "experimentalSpecifierResolution": "node"
+  },
+  "include": [
+    "./src/**/*"
+  ],
+  "exclude": [
+    "../node_modules"
+  ],
 }

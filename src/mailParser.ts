@@ -1,12 +1,13 @@
 import { Base64 } from "js-base64";
-import dayjs from "dayjs";
+import * as dayjs from 'dayjs'
 import _ from "lodash";
 
 import { parser } from "./providers/parser.js";
 import providers from "./providers/index.js";
 import textRegex from "./providers/text.js";
+import { gmail, gmail_v1 } from "googleapis/build/src/apis/gmail/index.js";
 
-export function mailToTransaction(mail) {
+export function mailToTransaction(mail: gmail_v1.Schema$Message) {
   let mailObj = headerTokenizer(mail);
   let provider = providers[mailObj.From];
   mailObj.body = provider.bodyExtractor(mail, mailObj);

@@ -2,25 +2,27 @@ import * as process from 'process';
 import * as path from 'path';
 import * as fs from 'fs/promises';
 import { authenticate } from '@google-cloud/local-auth';
-import { google } from 'googleapis';
+import { gmail_v1, google } from 'googleapis';
 import config from './config.js';
+import { oauth2 } from 'googleapis/build/src/apis/oauth2/index.js';
+import {OAuth2Client} from 'googleapis-common'
 
 // If modifying these scopes, delete token.json.
 const SCOPES = ['https://www.googleapis.com/auth/gmail.readonly'];
-var Gmail = null;
+var Gmail: gmail_v1.Gmail;
 
 async function loadSavedCredentialsIfExist() {
 	try {
-		const content = await fs.readFile(config.TOKEN_PATH);
+		const content = await fs.readFile(config.TOKEN_PATH,'utf8');
 		const credentials = JSON.parse(content);
-		return google.auth.fromJSON(credentials);
+		return google.auth.fromJSON(credentials) as OAuth2Client;
 	} catch (err) {
 		return null;
 	}
 }
 
 async function saveCredentials(client) {
-	const content = await fs.readFile(config.CREDENTIALS_PATH);
+	const content = await fs.readFile(config.CREDENTIALS_PATH,'utf8');
 	const keys = JSON.parse(content);
 	const key = keys.installed || keys.web;
 	const payload = JSON.stringify({
@@ -101,4 +103,3 @@ export async function watcher() {
 // await readMails()
 // await listLabels()
 // historyList()
-
